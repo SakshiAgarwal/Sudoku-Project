@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <limits.h>
+#include <algorithm>
 #include "GeneticAlgorithm.h"
 
 int main()
@@ -39,7 +40,7 @@ int main()
 
 /**    Parameters for Genetic algorithm **/
     int population_size=100; //size of Gene pool
-    int stop=1000; //number of generations to run until forced to stop; to go until completion set to 0
+    int stop=0; //number of generations to run until forced to stop; to go until completion set to 0
     //!!!PLEASE use steps of 10% when adjusting the parameters below to avoid segmentation faults!!!
     int elitism=10; //best percentage of candidates go to new gen unchanged; elitism=10 -> best 10%
     int eligible=50; //best percentage of candidates get to mate for new gen; eligible=50 -> best 50%

@@ -264,6 +264,7 @@ public:
              // Perform Elitism, that mean 10% of fittest population
              // goes to the next generation
              int s = (elitism*population_size)/100;
+	     //cout<<s<<"\n";
              for(int i = 0;i<s;i++){
                  //std::cout<<"New gen elite:\n";
                  new_generation.push_back(population[i]);
@@ -279,7 +280,9 @@ public:
 
              // From 50% of fittest population, Individuals
              // will mate to produce offspring
-             s = ((100-elitism)*population_size)/100;
+             //s = ((100-elitism)*population_size)/100;
+	     s = population_size - s;
+	     //cout<<s<<"\n";
              for(int i = 0;i<s;i++)
              {
                  //cout<< "Crossing: ";
@@ -287,8 +290,8 @@ public:
                  int r = random_num(0, eligible*population_size/100), s=r;
                  //cout<< "parent "<< r<<" with ";
                  Individual parent1 = population[r];
-                 while(s == r) s = random_num(0, eligible*population_size/10);
-                 //cout<< "parent "<< r<<"\n";
+                 while(s == r) s = random_num(0, eligible*population_size/100);
+                 //cout<< "parent "<< s<<"\n";
                  Individual parent2 = population[s];
                  Individual offspring = parent1.mate(parent2, fixed_val, mutation);
                  new_generation.push_back(offspring);
