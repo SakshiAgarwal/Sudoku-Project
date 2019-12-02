@@ -6,7 +6,7 @@
 #include <math.h>
 #include <limits.h>
 #include <algorithm>
-#include "GeneticAlgorithm.h"
+#include "GeneticAlgorithmV2.h"
 
 int main()
 {

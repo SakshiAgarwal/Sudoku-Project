@@ -281,8 +281,8 @@ public:
              // From 50% of fittest population, Individuals
              // will mate to produce offspring
              //s = ((100-elitism)*population_size)/100;
-	     s = population_size - s;
-	     //cout<<s<<"\n";
+	           s = population_size - s;
+	           //cout<<s<<"\n";
              for(int i = 0;i<s;i++)
              {
                  //cout<< "Crossing: ";
@@ -295,6 +295,11 @@ public:
                  Individual parent2 = population[s];
                  Individual offspring = parent1.mate(parent2, fixed_val, mutation);
                  new_generation.push_back(offspring);
+             }
+
+             for(int i = 0;i<population_size;i++)
+             {
+                population.pop_back();
              }
              population = new_generation;
              // cout<< "Generation: " << generation << "\n";
