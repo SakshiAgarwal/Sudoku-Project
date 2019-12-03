@@ -1,8 +1,8 @@
-#include "backtrack.h"
+#include "Backtrack.h"
 
-int backtracks = 0; // number of backtracks
+int Backtrack::backtracks = 0; // number of backtracks
 
-bool is_consistent(const pair <int, int> &var, const int &domain_val, const Assignments &assigned, const Constraints &C)
+bool Backtrack::is_consistent(const pair <int, int> &var, const int &domain_val, const Assignments &assigned, const Constraints &C)
 {
     for (int j = 0; j < assigned.size(); j++) {
         if (assigned[j].second == domain_val) {
@@ -24,7 +24,7 @@ bool is_consistent(const pair <int, int> &var, const int &domain_val, const Assi
     return true;
 }
 
-vector <pair <int, int>> get_neighbors(const pair <int, int> &var, const set <pair<int, int> > &unassigned)
+vector <pair <int, int>> Backtrack::get_neighbors(const pair <int, int> &var, const set <pair<int, int> > &unassigned)
 {
     vector <pair <int, int>> result;
     int number_of_boxes = sqrt(BOARD_SIZE);
@@ -38,7 +38,7 @@ vector <pair <int, int>> get_neighbors(const pair <int, int> &var, const set <pa
     return result;
 }
 
-pair <int, int> select_unassigned_var(set <pair<int, int> > &unassigned, const Domains &Y)
+pair <int, int> Backtrack::select_unassigned_var(set <pair<int, int> > &unassigned, const Domains &Y)
 {
     // MRV
     // degree heuristic resulted in more backtracks, so commented it out
@@ -61,7 +61,7 @@ pair <int, int> select_unassigned_var(set <pair<int, int> > &unassigned, const D
     return current_pair;
 }
 
-bool revise (const pair <int, int> &xi, const pair <int, int> &xj, Domains &Y)
+bool Backtrack::revise (const pair <int, int> &xi, const pair <int, int> &xj, Domains &Y)
 {
     bool revised = false;
     vector <int>::iterator iter = Y[xi.first][xi.second].begin();
@@ -82,7 +82,7 @@ bool revise (const pair <int, int> &xi, const pair <int, int> &xj, Domains &Y)
     return revised;
 }
 
-bool AC3(Assignments &assigned, set <pair<int, int> > &unassigned, const pair <int, int> &var, Domains &Y)
+bool Backtrack::AC3(Assignments &assigned, set <pair<int, int> > &unassigned, const pair <int, int> &var, Domains &Y)
 {
     queue <pair <pair <int, int>, pair<int, int>>> q;
     vector <pair <int, int> > neighbors = get_neighbors(var, unassigned);
@@ -117,7 +117,7 @@ bool AC3(Assignments &assigned, set <pair<int, int> > &unassigned, const pair <i
 }
 
 
-bool forward_checking(Assignments &assigned, set <pair<int, int> > &unassigned, const pair <int, int> &var, Domains &Y, const Constraints &C, const int &domain_val)
+bool Backtrack::forward_checking(Assignments &assigned, set <pair<int, int> > &unassigned, const pair <int, int> &var, Domains &Y, const Constraints &C, const int &domain_val)
 {
     vector <pair <int, int> > neighbors = get_neighbors(var, unassigned);
     for (int i = 0; i<neighbors.size(); i++) {
@@ -133,7 +133,7 @@ bool forward_checking(Assignments &assigned, set <pair<int, int> > &unassigned, 
     return true;
 }
 
-int number_of_eliminations(set <pair<int, int> > unassigned, pair <int, int> var, Domains Y, int domain_val)
+int Backtrack::number_of_eliminations(set <pair<int, int> > unassigned, pair <int, int> var, Domains Y, int domain_val)
 {
     int result=0;
     vector <pair <int, int> > neighbors = get_neighbors(var, unassigned);
@@ -147,29 +147,29 @@ int number_of_eliminations(set <pair<int, int> > unassigned, pair <int, int> var
     return result;
 }
 
-struct Comparator {
-    Comparator(pair <int, int> var, set <pair<int, int> > unassigned, Domains Y) {this->var = var; this->unassigned = unassigned; this->Y = Y;}
-    bool operator() (int p1, int p2)
-    {
-        return (number_of_eliminations(this->unassigned, this->var, this->Y, p1) > number_of_eliminations(this->unassigned, this->var, this->Y, p2));
-    }
-    set <pair<int, int> > unassigned;
-    Domains Y;
-    pair <int, int> var;
-};
+Backtrack::Comparator::Comparator(pair <int, int> var, set <pair<int, int> > unassigned, Domains Y) {
+  this->var = var; 
+  this->unassigned = unassigned; 
+  this->Y = Y;
+}
 
-vector <int> order_domain_vals (pair <int, int> var, vector <int> domain, set <pair<int, int> > unassigned, Domains Y)
+bool Backtrack::Comparator::operator() (int p1, int p2)
+{
+    return (Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p1) > Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p2));
+}
+
+vector <int> Backtrack::order_domain_vals (pair <int, int> var, vector <int> domain, set <pair<int, int> > unassigned, Domains Y)
 {
     vector <int> result = domain;
     
     // least constraining value heuristic, but "most constraining" actually works better!?
-    //sort(result.begin(), result.end(), Comparator(var, unassigned, Y));
-    qsort(&result[0], result.size(), sizeof(int), Comparator(var, unassigned, Y).operator);
+    sort(result.begin(), result.end(), Comparator(var, unassigned, Y));
+    //qsort(&result[0], result.size(), sizeof(int), Comparator(var, unassigned, Y).operator());
 
     return result;
 }
 
-bool backtrack(Assignments &assigned, set <pair<int, int> > unassigned, Domains Y, const Constraints &C)
+bool Backtrack::backtrack(Assignments &assigned, set <pair<int, int> > unassigned, Domains Y, const Constraints &C)
 {
     backtracks++;
     if (!unassigned.size()) {
@@ -201,8 +201,9 @@ bool backtrack(Assignments &assigned, set <pair<int, int> > unassigned, Domains 
     return false;
 }
 
-bool run(int board[BOARD_SIZE][BOARD_SIZE])
+bool Backtrack::run(int board[BOARD_SIZE][BOARD_SIZE])
 {
+    backtracks = 0;
     // initialize domain for each index
     Domains Y(BOARD_SIZE, vector <vector <int> >(BOARD_SIZE, vector <int>()));
     for (int i = 0; i<BOARD_SIZE; i++) {
@@ -279,10 +280,22 @@ bool run(int board[BOARD_SIZE][BOARD_SIZE])
     for (int i = 0; i < assigned.size(); i++) {
         board[assigned[i].first.first][assigned[i].first.second] = assigned[i].second;
     }
+    if(result)
+    {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                cout << board[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << "number of backtracks: " << backtracks << endl;
+    }
+    else {
+        cout << "fail" << endl;
+    }
     return result;
 }
-
-
+/*
 int main()
 {
     // initialize board
@@ -311,3 +324,4 @@ int main()
 
 }
 
+*/

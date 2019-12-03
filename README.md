@@ -1,1 +1,1 @@
-# Sudoku-Project
+# SudokuProject
