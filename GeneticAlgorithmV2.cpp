@@ -44,7 +44,7 @@ int main()
     //!!!PLEASE use steps of 10% when adjusting the parameters below to avoid segmentation faults!!!
     int elitism=10; //best percentage of candidates go to new gen unchanged; elitism=10 -> best 10%
     int eligible=50; //best percentage of candidates get to mate for new gen; eligible=50 -> best 50%
-    float mutation=0.04; //chance of random gene for offspring instead of parents'; mutation=0.1 -> 10% chance
+    float mutation=0.1; //chance of random gene for offspring instead of parents'; mutation=0.1 -> 10% chance
 
     Board.compute(population_size, elitism, eligible, mutation, stop);
 
