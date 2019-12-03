@@ -12,17 +12,16 @@
 #include <math.h>
 #include <limits.h>
 #include "Sudoku.h"
-#include "State.h"
 #include "Utils.h"
 using namespace std;
 
 class SimulatedAnnealing
 {
-  public:
-    /** Change here for a 25*25 input **/
-    const static int SRN = 3;
-    const static int N = 9;
+  private: 
+    Sudoku current;
+    bool** fixed;
 
+  public:
     // Thresholding parameters -
     // initial Temperature T
     // numIterations - number of Iterations for a particular temp T
@@ -31,11 +30,15 @@ class SimulatedAnnealing
     double Tmin;
     double alpha;
     int numIterations;
-    double f;
+    double fStop;
     double p;
 
-    SimulatedAnnealing(double T, double Tmin, double a, int num,int fstop, double p);
-    int randomGenerator(int num);
-    State run(Sudoku *Board);
+    SimulatedAnnealing(Sudoku inputSudoku);
+    SimulatedAnnealing(double inputT, double inputTmin, double inputAlpha, int inputNum,int inputFstop, double inputP, Sudoku inputBoard);
+    
+    Sudoku getNeighbor();
+    void printCurrentBoard();
+
+    bool run();
 };
 #endif

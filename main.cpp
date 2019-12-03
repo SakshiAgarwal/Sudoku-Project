@@ -1,25 +1,10 @@
 #include<iostream>
-#include "src/SudokuManager.h"
+#include "src/Sudoku.h"
+#include "src/SudokuGenerator.h"
 #include "src/SimulatedAnnealing.h"
 #include "src/GeneticAlgorithm.h"
 #include "src/Backtrack.h"
-
-#include <map>
-
 using namespace std;
-
-void testSudokuManager()
-{
-  SudokuManager::seed();
-  SudokuManager a = SudokuManager::generateBoard(3, 50); // 9x9 board with 50 squares filled in
-  a.print();
-  a.save("output.txt");
-  a.save("shiity.txt");
-
-  SudokuManager b = SudokuManager::benchmarkBoard(1); // get the first benchmark board
-  b.print();
-  a.save("fuck.txt");
-}
 
 void testGeneticAlgorithm(int mat[9][9])
 {
@@ -36,20 +21,56 @@ void testGeneticAlgorithm(int mat[9][9])
   Board.compute(population_size, elitism, eligible, mutation, stop);
 }
 
-void testSimulatedAnnealing(int mat[9][9])
+void testSudoku()
 {
-  Sudoku Board(mat);
+  // Test all constructors
+  Sudoku a = Sudoku();
+  a.print();
+  Sudoku b = Sudoku(9);
+  b.print();
+  Sudoku c = Sudoku("./boards/guaranteed_solution.txt");
+  c.print();
+  Sudoku d = Sudoku::benchmarkBoard(1);
+  d.print();
+  Sudoku e = Sudoku(16, d.board);
+  e.print();
 
-  int T=20;
-  double Tmin = 0.001;
-  double alpha = 0.9;
-  int numIterations = 500;
-  double fstop = 0;
-  double p = 0.6;
-  SimulatedAnnealing SA(T,Tmin,alpha,numIterations, fstop, p);
-  State sol = SA.run(&Board);
-  sol.printState();
-  std::cout<<sol.fitness();
+  // Checking copy
+  Sudoku f = e.copy();
+  f.print();
+  e.board[0][0] = 10000;
+  e.print();
+  f.print();
+  
+  // Checking bool functions
+  Sudoku g = Sudoku("./boards/test.txt");
+  g.print();
+  int val = 4;
+  for(int i = 0; i < g.size; i++)
+  {
+    for(int j = 0; j < g.size; j++)
+    {
+      bool h = g.validInRow(i, val);
+      bool k = g.validInCol(j, val);
+      bool l = g.validInBlock(i, j, val);
+      bool m = g.valid(i, j, val);
+      cout<<"("<<m<<"="<<h<<k<<l<<") ";
+    } 
+    cout << endl;
+  }
+}
+void testSimulatedAnnealing()
+{
+  //Sudoku a = Sudoku("./boards/test.txt");
+  Sudoku a = Sudoku::benchmarkBoard(1); 
+  SimulatedAnnealing b = SimulatedAnnealing(a);
+  b.alpha = 0.9995;
+  b.T = 4;
+  b.Tmin = 2.0;
+  b.printCurrentBoard();
+  bool result = b.run();
+  cout << "Simulated Annealing Result: "<< result << endl;
+  b.printCurrentBoard();
 }
 void testBacktrack(int mat[9][9])
 {
@@ -63,6 +84,7 @@ void testBacktrack(int mat[9][9])
 
 int main()
 {
+  /*
   int mat[9][9] =
     {
       {0, -1, -1, -1, -1, -1, -1, -1, 1},
@@ -75,9 +97,10 @@ int main()
       {2, 3, -1, 5, -1, -1, 7, -1, -1},
       {7, -1, -1, -1, -1, -1, -1, -1, 0}
     };
-  //testSudokuManager();
-  testGeneticAlgorithm(mat);
-  //testSimulatedAnnealing(mat);
+    */
+  //testSudoku();
+  //testGeneticAlgorithm(mat);
+  testSimulatedAnnealing();
   //testBacktrack();
   return 0;
 }

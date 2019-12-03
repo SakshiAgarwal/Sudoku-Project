@@ -1,23 +1,42 @@
+#ifndef SUDOKU_H
+#define SUDOKU_H
 #include<iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <regex>
+
 #include<math.h>
 using namespace std;
 
 class Sudoku
 {
   private:
-    /** Change here for a 25*25 input **/
-    const static int N = 9;
-    const static int SRN = 3;
-  public:
-    int mat[N][N];
-    int fix[N][N];
+    static string output_folder;
+    static char file_names[8][27];
 
-    Sudoku(int a[N][N]);
-    bool unUsedInBox(int rowStart, int colStart, int num);
-    bool unUsedInRow(int i,int num);
-    bool unUsedInCol(int j,int num);
-    bool CheckIfSafe(int i,int j,int num);
-    void printSudoku();
-    int randomGenerator(int num);
-    void init_solution(); 
+  public:
+    int** board;
+    int size;
+
+    // constructors
+    Sudoku();
+    Sudoku(int size);
+    Sudoku(string file_name);
+    Sudoku(int input_size, int** input_board);
+    Sudoku copy();
+
+    // bool functions
+    bool validInCol(int j, int val);
+    bool validInRow(int i, int val);
+    bool validInBlock(int i, int j, int val);
+    bool valid(int i, int j, int val);
+
+    // IO Functions
+    int** getBoardCopy();
+    void print();
+    void save(string output_name);
+    static Sudoku benchmarkBoard(int index);
 };
+#endif

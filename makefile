@@ -1,5 +1,5 @@
 SRCDIR      := src
-SRC_NAMES   := Sudoku Utils Individual Backtrack GeneticAlgorithm State SimulatedAnnealing SudokuManager 
+SRC_NAMES   := Utils Sudoku SudokuGenerator Individual Backtrack GeneticAlgorithm SimulatedAnnealing 
 SRC_O_FILES     := $(addprefix $(SRCDIR)/, $(addsuffix .o, $(SRC_NAMES))) 
 SRC_H_FILES := $(addprefix $(SRCDIR)/, $(addsuffix .h, $(SRC_NAMES))) 
 
