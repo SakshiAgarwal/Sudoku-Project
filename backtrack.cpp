@@ -43,8 +43,8 @@ pair <int, int> select_unassigned_var(set <pair<int, int> > &unassigned, const D
     // MRV
     // degree heuristic resulted in more backtracks, so commented it out
     set <pair<int, int> >::iterator iter, current_iter;
-    int current_min = INT_MAX;
-    int degree_max = INT_MIN;
+    int current_min = INT8_MAX;
+    int degree_max = INT8_MIN;
     pair <int, int> current_pair = *unassigned.begin();
     for (iter = unassigned.begin(); iter != unassigned.end(); iter++) {
         int domain_size = Y[(*iter).first][(*iter).second].size();
@@ -163,8 +163,9 @@ vector <int> order_domain_vals (pair <int, int> var, vector <int> domain, set <p
     vector <int> result = domain;
     
     // least constraining value heuristic, but "most constraining" actually works better!?
-    sort(result.begin(), result.end(), Comparator(var, unassigned, Y));
-    
+    //sort(result.begin(), result.end(), Comparator(var, unassigned, Y));
+    qsort(&result[0], result.size(), sizeof(int), Comparator(var, unassigned, Y).operator);
+
     return result;
 }
 
