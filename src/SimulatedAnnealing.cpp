@@ -22,51 +22,72 @@ SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double i
   
   int size = current.size;
   int sqrtSize = (int)sqrt(size);
-  fixed = new bool *[size];
-  // Init canChagne matrix and fill the board
+
+  // init an array of numbers missing
+  int* countMissing = new int[size];
   for (int i = 0; i < size; i++)
   {
-    fixed[i] = new bool[size];
+    countMissing[i] = size;
+  }
+  
+  // Init canChagne matrix and gather countMissing data
+  for (int i = 0; i < size; i++)
+  {
     for (int j = 0; j < size; j++)
     {
-      if (current.board[i][j] == -1)
+      int val = current.board[i][j];
+      if(val == -1)
       {
-        fixed[i][j] = false;
-        // Assign a random value
-        int num = -1; //temporary
-        do
-        {
-          num = Utils::randomGenerator(size);
-        } while (!current.validInBlock(i, j, num));
-        current.board[i][j] = num;
+        freePoints.push_back(pair<int, int>(i,j));
+      } else {
+        countMissing[val] -= 1;
       }
-      else
+    }
+  }
+
+  // fill the board
+  for(int k = 0; k < freePoints.size(); k++)
+  {
+    pair<int, int> p = freePoints[k];
+    int i = p.first;
+    int j = p.second;
+
+    // find a value we can fill the space with
+    bool notFilled = true;
+    int val = 0;
+    while(notFilled)
+    {
+      if(countMissing[val] > 0)
       {
-        fixed[i][j] = true;
+        notFilled = false;
+        countMissing[val] -= 1;
+        current.board[i][j] = val;
       }
+      val += 1;
     }
   }
 }
 Sudoku SimulatedAnnealing::getNeighbor()
 {
-  int i, j, k1, k2, k3, k4;
   Sudoku neighbor = current.copy();
   int size = current.size;
   int sqrtSize = (int)sqrt(size);
 
-  i = Utils::randomGenerator(size);
-  j = Utils::randomGenerator(size);
-  do
+  int index_1 = Utils::randomGenerator(freePoints.size());
+  int index_2 = Utils::randomGenerator(freePoints.size());
+  while(index_1 == index_2)
   {
-    k1 = i - i % sqrtSize + Utils::randomGenerator(sqrtSize);
-    k2 = j - j % sqrtSize + Utils::randomGenerator(sqrtSize);
+    index_2 = Utils::randomGenerator(freePoints.size());
+  }
+  pair<int, int> p1 = freePoints[index_1];
+  pair<int, int> p2 = freePoints[index_2];
+  int i1 = p1.first;
+  int j1 = p1.second;
+  int i2 = p2.first;
+  int j2 = p2.second;
 
-    k3 = i - i % sqrtSize + Utils::randomGenerator(sqrtSize);
-    k4 = j - j % sqrtSize + Utils::randomGenerator(sqrtSize);
-  } while (fixed[k1][k2] || fixed[k3][k4]);
-
-  neighbor.board[k1][k2] = current.board[k3][k4];
-  neighbor.board[k3][k4] = current.board[k1][k2];
+  neighbor.board[i1][j1] = current.board[i2][j2];
+  neighbor.board[i2][j2] = current.board[i1][j1];
   return neighbor;
 }
 void SimulatedAnnealing::printCurrentBoard()
@@ -76,8 +97,11 @@ void SimulatedAnnealing::printCurrentBoard()
 bool SimulatedAnnealing::run()
 {
   int currentFitnessScore = Utils::fitness(current);
+  if(currentFitnessScore == 0)
+  {
+    return true;
+  }
   double currTemperature = T;
-
   while (currTemperature > Tmin)
   {
     for (int i = 0; i < numIterations; i++)

@@ -11,6 +11,7 @@
 #include <iostream>
 #include <math.h>
 #include <limits.h>
+#include <vector>
 #include "Sudoku.h"
 #include "Utils.h"
 using namespace std;
@@ -19,7 +20,7 @@ class SimulatedAnnealing
 {
   private: 
     Sudoku current;
-    bool** fixed;
+    vector<pair<int, int>> freePoints;
 
   public:
     // Thresholding parameters -

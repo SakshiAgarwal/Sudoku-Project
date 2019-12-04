@@ -2,6 +2,8 @@
 
 int Backtrack::backtracks = 0; // number of backtracks
 
+int Backtrack::BOARD_SIZE = -1; // just the init number
+
 bool Backtrack::is_consistent(const pair<int, int> &var, const int &domain_val, const Assignments &assigned, const Constraints &C)
 {
   for (int j = 0; j < assigned.size(); j++)
@@ -206,7 +208,18 @@ bool Backtrack::backtrack(Assignments &assigned, set<pair<int, int>> unassigned,
     return true;
   }
   pair<int, int> var = select_unassigned_var(unassigned, Y);
+  cout <<"B: "<<backtracks<<"\t U.size: "<< unassigned.size() << "\t= (" << var.first << " , " << var.second<< ")"<<endl;
+  for(auto shit : Y[var.first][var.second])
+  {
+    cout << shit << ", ";
+  }
+  cout << endl;
   vector<int> domain = order_domain_vals(var, Y[var.first][var.second], unassigned, Y);
+  for(auto shit : domain)
+  {
+    cout << shit << ", ";
+  }
+  cout << endl;
   for (int i = 0; i < domain.size(); i++)
   {
     if (is_consistent(var, domain[i], assigned, C))
@@ -236,9 +249,11 @@ bool Backtrack::backtrack(Assignments &assigned, set<pair<int, int>> unassigned,
   return false;
 }
 
-bool Backtrack::run(int board[BOARD_SIZE][BOARD_SIZE])
+bool Backtrack::run(int inputSize, int** board)
 {
+  BOARD_SIZE = inputSize;
   backtracks = 0;
+
   // initialize domain for each index
   Domains Y(BOARD_SIZE, vector<vector<int>>(BOARD_SIZE, vector<int>()));
   for (int i = 0; i < BOARD_SIZE; i++)

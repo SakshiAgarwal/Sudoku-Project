@@ -21,70 +21,32 @@ void testGeneticAlgorithm(int mat[9][9])
   Board.compute(population_size, elitism, eligible, mutation, stop);
 }
 
-void testSudoku()
-{
-  // Test all constructors
-  Sudoku a = Sudoku();
-  a.print();
-  Sudoku b = Sudoku(9);
-  b.print();
-  Sudoku c = Sudoku("./boards/guaranteed_solution.txt");
-  c.print();
-  Sudoku d = Sudoku::benchmarkBoard(1);
-  d.print();
-  Sudoku e = Sudoku(16, d.board);
-  e.print();
-
-  // Checking copy
-  Sudoku f = e.copy();
-  f.print();
-  e.board[0][0] = 10000;
-  e.print();
-  f.print();
-  
-  // Checking bool functions
-  Sudoku g = Sudoku("./boards/test.txt");
-  g.print();
-  int val = 4;
-  for(int i = 0; i < g.size; i++)
-  {
-    for(int j = 0; j < g.size; j++)
-    {
-      bool h = g.validInRow(i, val);
-      bool k = g.validInCol(j, val);
-      bool l = g.validInBlock(i, j, val);
-      bool m = g.valid(i, j, val);
-      cout<<"("<<m<<"="<<h<<k<<l<<") ";
-    } 
-    cout << endl;
-  }
-}
 void testSimulatedAnnealing()
 {
-  //Sudoku a = Sudoku("./boards/test.txt");
-  Sudoku a = Sudoku::benchmarkBoard(1); 
+  Sudoku a = SudokuGenerator::generateGuarantee(16, 1, 159);
   SimulatedAnnealing b = SimulatedAnnealing(a);
+
   b.alpha = 0.9995;
   b.T = 4;
-  b.Tmin = 2.0;
-  b.printCurrentBoard();
+  //b.numIterations = 10;
+  //b.Tmin = 2.0;
+
   bool result = b.run();
+  a.print();
+  cout << "=============================="<<endl;
   cout << "Simulated Annealing Result: "<< result << endl;
   b.printCurrentBoard();
 }
-void testBacktrack(int mat[9][9])
+void testBacktrack()
 {
-  //SudokuManager::seed();
-  //SudokuManager b = SudokuManager::benchmarkBoard(6); // get the first benchmark board
-  //SudokuManager b = SudokuManager("boards/guaranteed_solution2.txt");
-  //Backtrack solver = Backtrack(16, b.getBoard());
-  int result = Backtrack::run(mat);
+  Sudoku a = SudokuGenerator::generateGuarantee(16, 1, 20);
+  int result = Backtrack::run(a.size, a.board);
   cout << "RESULT: " << result << endl;
 }
 
 int main()
 {
-  /*
+/*
   int mat[9][9] =
     {
       {0, -1, -1, -1, -1, -1, -1, -1, 1},
@@ -97,8 +59,8 @@ int main()
       {2, 3, -1, 5, -1, -1, 7, -1, -1},
       {7, -1, -1, -1, -1, -1, -1, -1, 0}
     };
-    */
-  //testSudoku();
+  */
+  //Sudoku::test();
   //testGeneticAlgorithm(mat);
   testSimulatedAnnealing();
   //testBacktrack();

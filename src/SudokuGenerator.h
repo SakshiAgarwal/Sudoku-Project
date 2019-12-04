@@ -15,6 +15,6 @@ class SudokuGenerator
 
   public:
     static Sudoku generateNoGuarantee(int inputSize, int numberOfSquaresFilled);
-    static Sudoku generateGuarantee(int inputSize, int numberOfSquaresFilled);
+    static Sudoku generateGuarantee(int inputSize, int index, int numberOfSquaresToErase);
 };
 #endif

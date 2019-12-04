@@ -21,6 +21,7 @@ int** SudokuGenerator::empty2DInt(int inputSize)
 
 Sudoku SudokuGenerator::generateNoGuarantee(int inputSize, int numberOfSquaresFilled)
 {  
+  Utils::seed();
   Sudoku a = Sudoku(inputSize);
   int count = numberOfSquaresFilled;
   while(count > 0)
@@ -40,9 +41,24 @@ Sudoku SudokuGenerator::generateNoGuarantee(int inputSize, int numberOfSquaresFi
   }
   return a;
 }
-Sudoku SudokuGenerator::generateGuarantee(int inputSize, int numberOfSquaresFilled)
+Sudoku SudokuGenerator::generateGuarantee(int inputSize, int index, int numberOfSquaresToErase)
 {
-  // not implemented yet
-  Sudoku a = Sudoku(9);
-  return a;
+  Utils::seed();
+  string a = "./boards/"+to_string(inputSize)+"_fully_solved_"+to_string(index)+".txt";
+  Sudoku b = Sudoku(a);
+  for(int i=0; i < numberOfSquaresToErase; i++)
+  {
+    bool notDone = true;
+    while(notDone)
+    {
+      int i = Utils::randomGenerator(inputSize);
+      int j = Utils::randomGenerator(inputSize);
+      if(b.board[i][j] != -1)
+      {
+        b.board[i][j] = -1;
+        notDone = false;
+      }
+    }
+  }
+  return b;
 }

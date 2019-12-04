@@ -63,8 +63,16 @@ Sudoku::Sudoku(std::string file_name)
             row.push_back(stoi(w));
           } else 
           {
-            int temp = ( (int) w.at(0) - 'A') + 10;
-            row.push_back(temp);
+            int pre = ((int)w.at(0));
+            if(pre >= (int)'a')
+            {
+              pre -= 'a';
+            }
+            else if(pre >= (int)'A')
+            {
+              pre -= 'A';
+            }
+            row.push_back(pre + 10);
           }
         } 
         vectorBoard.push_back(row);
@@ -81,7 +89,7 @@ Sudoku::Sudoku(std::string file_name)
       board[i] = new int[size];
       for (auto v: row) 
       {
-        board[i][j] = v;
+        board[i][j] = v  % size; // mod so we get the values in [0,size)
         j += 1;
       }
       i += 1;
@@ -98,7 +106,7 @@ Sudoku::Sudoku(int input_size, int** input_board)
     board[i] = new int[size];
     for(int j = 0; j < size; j++)
     {
-      board[i][j] = input_board[i][j];
+      board[i][j] = input_board[i][j] % input_size;
     }
   }
 }
@@ -246,4 +254,56 @@ Sudoku Sudoku::benchmarkBoard(int index)
   char* name = file_names[index];
   Sudoku temp(name);
   return temp;
+}
+
+void Sudoku::test()
+{
+  
+  // create using all constructors
+  Sudoku a = Sudoku();
+  Sudoku b = Sudoku(9);
+  Sudoku c = Sudoku("./boards/guaranteed_solution.txt");
+  Sudoku d = Sudoku::benchmarkBoard(0);
+  Sudoku e = Sudoku(16, d.board);
+  bool correct = true;
+  for(int i = 0; i < e.size; i++)
+  {
+    for(int j = 0; j < e.size; j++)
+    {
+      if(d.board[i][j] != e.board[i][j])
+      {
+        correct = false;
+      }
+    }
+  }
+  // Checking copy
+  Sudoku f = e.copy();
+  e.board[0][0] = 10000;
+  
+  // print results
+  cout << "Constructor Sudoku()\t\t\t: "<< (a.size == 9) << endl;
+  cout << "Constructor Sudoku(9)\t\t\t: "<< (b.size == 9) << endl;
+  cout << "Constructor Sudoku(string)\t\t: "<< (c.size == 9 && c.board[0][0] == 8) << endl;
+  cout << "Constructor benchmarkBoard(int)\t\t: "<< (d.size == 16 && d.board[14][15] == 10) << endl;
+  cout << "Constructor Sudoku(int, int**)\t\t: "<< (correct && &e != &d) << endl;
+  cout << "Constructor copy()\t\t\t: "<< (f.board[0][0] != 10000) << endl;
+
+  // Checking bool functions
+  cout << "The diagonal_test.txt board:"<<endl;
+  Sudoku g = Sudoku("./boards/diagonal_test.txt");
+  g.print();
+  cout << "should see all the squares that aren't valid marked with 0:"<<endl;
+  int val = 4;
+  for(int i = 0; i < g.size; i++)
+  {
+    for(int j = 0; j < g.size; j++)
+    {
+      bool h = g.validInRow(i, val);//
+      bool k = g.validInCol(j, val);
+      bool l = g.validInBlock(i, j, val);
+      bool m = g.valid(i, j, val);//
+      cout<<"("<<m<<"="<<h<<k<<l<<") ";
+    } 
+    cout << endl;
+  }
 }

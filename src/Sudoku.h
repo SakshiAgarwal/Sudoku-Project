@@ -38,5 +38,7 @@ class Sudoku
     void print();
     void save(string output_name);
     static Sudoku benchmarkBoard(int index);
+
+    static void test();
 };
 #endif

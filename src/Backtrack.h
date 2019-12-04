@@ -1,8 +1,6 @@
 #ifndef BACKTRACK_H
 #define BACKTRACK_H
 
-#define BOARD_SIZE 9
-
 #include <set>
 #include <iostream>
 #include <queue>
@@ -16,6 +14,7 @@ using namespace std;
 class Backtrack
 {
   public:
+    static int BOARD_SIZE;
     static int backtracks;
     typedef set <pair <pair <int, int>, pair <int, int> > > Constraints;
     typedef vector < vector <vector <int> > > Domains;
@@ -47,6 +46,6 @@ class Backtrack
 
     static bool backtrack(Assignments &assigned, set <pair<int, int> > unassigned, Domains Y, const Constraints &C);
 
-    static bool run(int board[BOARD_SIZE][BOARD_SIZE]);
+    static bool run(int inputSize, int** inputBoard);
 };
 #endif
