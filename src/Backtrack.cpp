@@ -186,14 +186,14 @@ Backtrack::Comparator::Comparator(pair<int, int> var, set<pair<int, int>> unassi
 
 bool Backtrack::Comparator::operator()(int p1, int p2)
 {
-  return (Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p1) > Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p2));
+  return (Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p1) < Backtrack::number_of_eliminations(this->unassigned, this->var, this->Y, p2));
 }
 
 vector<int> Backtrack::order_domain_vals(pair<int, int> var, vector<int> domain, set<pair<int, int>> unassigned, Domains Y)
 {
   vector<int> result = domain;
 
-  // least constraining value heuristic, but "most constraining" actually works better!?
+  // least constraining value heuristic
   sort(result.begin(), result.end(), Comparator(var, unassigned, Y));
   //qsort(&result[0], result.size(), sizeof(int), Comparator(var, unassigned, Y).operator());
 
@@ -402,3 +402,4 @@ int main()
 }
 
 */
+
