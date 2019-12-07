@@ -1,0 +1,40 @@
+Backtracking is a way of applying depth-first search to a constraint satisfaction problem. The procedure simply selects an unassigned variable, and tries all domain variables that are consistent with the remaining solution. If a valid domain value is found, it assigns this value to the variable, then it calls itself recursively with the updated problem containing the new assignment. If at any point the algorithm runs out of domain values to try, it will return from the recursive call, canceling the backtracking process. If this happens, then the previous recursive call tries a different value, and so on. If there is no previous call (i.e. the very first function call runs out of domain values to try), then the algorithm will return a "fail".
+
+The backtracking algorithm has a number of important components that work simultaneously. These are:
+- The heuristic function for selecting a variable
+- The heuristic function for selecting a domain value
+- A pre-processing step that performs arc consistency
+
+These components, along with the base backtracking algorithm are what make up our implementation of backtracking for the sudoku puzzle.
+
+Pseudocode
+------
+The algorithm works as follows:
+
+1. It first runs the variable selection heuristic, with the minimum-remaining values heuristic. In other words, it will select the variable in the sudoku puzzle with the least amount of domain values remaining. Normally, for the case of a tie occurring between two variables, a maximum degree heuristic was also implemented, but we found that adding that heuristic caused the running time to be worse.
+
+2. It then runs the domain value selection heuristic. It uses the "least constraining value" heuristic, which selects the domain value that constrains the least amount of values of neighboring variables.
+
+3. It then performs a consistency check for the newly assigned variable, i.e. it checks if there is a constraint that was violated with the new assignment. If it does find such a constraint violation, it will skip that value and move onto the next domain value to try. If instead it finds them to be consistent, it will add the assigned variable to the solution set.
+
+4. Assuming that the new assignment was consistent, the algorithm will now call the AC-3 arc consistency function, which reduces the size of the search space by eliminating unnecessary domain values. If AC-3, upon updating the domain values, finds that the domain for any variable is reduced to the empty set, it will terminate and the recursive call will return from the backtrack with failure. If AC-3 finds that the domain for any variable becomes 1, it will add that value to the solution set, since it knows that's the only value the variable can have. Besides these cases, AC-3 will end up reducing the size of the domains of all relevant variables if it finds an inconsistency.
+
+5. If AC-3 returns without any failures, the backtracking algorithm will then do a recursive call for backtrack, with the updated problem with the newly assigned variable.
+
+6. If the recursive backtrack returns with failure, the previous function call will remove the most recently assigned variable from the assigned list and will instead try a new domain value for the variable.
+
+7. If the recursive backtrack returns successfully, the algorithm returns successfully as well, with the updated assigned list.
+
+Implementation details
+-----
+Heuristics
+There are a total of 4 heuristics that were considered in the algorithm:
+(1) Minimum-remaining values heuristic for variable selection
+(2) Maximum-degree heuristic for tie-breaking in (1)
+(3) Least constraining value heuristic for domain value selection
+(4) Arc consistency using the AC-3 algorithm
+
+We found that heuristics (1) and (3) and (4) sped up the running time of the algorithm, however adding (2) to the mix caused slower times. One explanation for this can be that the maximum degree heuristic has the added overhead of calculating the unassigned neighbors of the variable in question. Since with sudoku there can be many variables that have equal remaining values, this would cause a lot of extra computation. Now without (2), heuristic (1) by itself will just return the first variable it finds among the equal ones, instead of computing neighbors for each. So the trade-off between the extra computation and the potential for a faster algorithm wasn't useful for our algorithm, as the heuristic didn't seem to make up for the extra computation it required.
+
+
+------------------------------------------------------------------------------------------------------------------------------------------

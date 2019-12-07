@@ -2,7 +2,6 @@
 .vscode/
 
 # Random Output files
-*.txt
 !boards/*.txt 
 
 # Prerequisites
