@@ -24,7 +24,6 @@ Individual Individual::mate(Individual par2, int fixed_val[Utils::N][Utils::N], 
   {
     child_chromosome[i] = new int[Utils::N];
   }
-  //int len = chromosome.size();
   for(int i=0; i<Utils::N; i++)
   {
     for(int j=0; j<Utils::N; j++)
@@ -70,13 +69,6 @@ int Individual::cal_fitness()
   for(int i=0; i<Utils::N; i++)
     for(int j=0; j<Utils::N; j++)
     {
-      // if(i == 0 && j == 6)
-      // {
-      //   std::cout<<"chromosome["<<i<<"]["<<j<<"]: "<<chromosome[i][j]<<" is safe?: "<<CheckIfSafe(i, j, chromosome[i][j])<<"\n";
-      //   std::cout<<"unUsedInRow: "<<unUsedInRow(i, chromosome[i][j], j)<<"\n";
-      //   std::cout<<"unUsedInCol: "<<unUsedInCol(j, chromosome[i][j], i)<<"\n";
-      //   std::cout<<"unUsedInBox: "<<unUsedInBox(i-i%SRN, j-j%SRN, chromosome[i][j], i, j)<<"\n";
-      // }
       if(!CheckIfSafe(i, j, chromosome[i][j]))
           fitness++;
     }

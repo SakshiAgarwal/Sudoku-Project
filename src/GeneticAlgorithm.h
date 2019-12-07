@@ -20,7 +20,6 @@ class GeneticAlgorithm
     int fixed_val[Utils::N][Utils::N];
     int mat[Utils::N][Utils::N];
 
-    char mutated_genes();
     int **create_gnome(int mat[Utils::N][Utils::N]);
     GeneticAlgorithm(int mat[Utils::N][Utils::N]);
     void compute(int population_size, int elitism, int eligible, float mutation, int stop);

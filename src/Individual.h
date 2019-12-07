@@ -16,9 +16,12 @@ class Individual
   public:
     int chromosome[Utils::N][Utils::N];
     int fitness;
+
     Individual(int** chromosome);
     Individual mate(Individual parent2, int fixed_val[Utils::N][Utils::N], float mutation);
+
     int cal_fitness();
+    
     bool unUsedInBox(int rowStart, int colStart, int num, int i, int j);
     bool unUsedInRow(int i,int num, int j);
     bool unUsedInCol(int j,int num, int i);

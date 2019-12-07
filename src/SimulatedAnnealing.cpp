@@ -2,25 +2,25 @@
 
 SimulatedAnnealing::SimulatedAnnealing(Sudoku inputSudoku)
 {
+  // default
   double inputT = 20;
   double inputTmin = 0.001;
   double inputAlpha = 0.9;
   int inputNum = 500;
-  int inputFstop = 0;
   double inputP = 0.6;
-  *this = SimulatedAnnealing(inputT, inputTmin, inputAlpha, inputNum, inputFstop, inputP, inputSudoku);
+  *this = SimulatedAnnealing(inputT, inputTmin, inputAlpha, inputNum, inputP, inputSudoku);
 }
-SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double inputAlpha, int inputNum, int inputFstop, double inputP, Sudoku inputSudoku)
+SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double inputAlpha, int inputNeighbors, double inputP, Sudoku inputSudoku)
 {
   T = inputT;
   Tmin = inputTmin;
   alpha = inputAlpha;
-  numIterations = inputNum;
-  fStop = inputFstop;
+  num_neighbors = inputNeighbors;
   p = inputP;
-  current = inputSudoku.copy();
+  solution = inputSudoku.copy();
+  total_iteration = 0;
   
-  int size = current.size;
+  int size = solution.size;
   int sqrtSize = (int)sqrt(size);
 
   // init an array of numbers missing
@@ -35,7 +35,7 @@ SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double i
   {
     for (int j = 0; j < size; j++)
     {
-      int val = current.board[i][j];
+      int val = solution.board[i][j];
       if(val == -1)
       {
         freePoints.push_back(pair<int, int>(i,j));
@@ -61,7 +61,7 @@ SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double i
       {
         notFilled = false;
         countMissing[val] -= 1;
-        current.board[i][j] = val;
+        solution.board[i][j] = val;
       }
       val += 1;
     }
@@ -69,8 +69,8 @@ SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double i
 }
 Sudoku SimulatedAnnealing::getNeighbor()
 {
-  Sudoku neighbor = current.copy();
-  int size = current.size;
+  Sudoku neighbor = solution.copy();
+  int size = solution.size;
   int sqrtSize = (int)sqrt(size);
 
   int index_1 = Utils::randomGenerator(freePoints.size());
@@ -86,44 +86,121 @@ Sudoku SimulatedAnnealing::getNeighbor()
   int i2 = p2.first;
   int j2 = p2.second;
 
-  neighbor.board[i1][j1] = current.board[i2][j2];
-  neighbor.board[i2][j2] = current.board[i1][j1];
+  neighbor.board[i1][j1] = solution.board[i2][j2];
+  neighbor.board[i2][j2] = solution.board[i1][j1];
   return neighbor;
 }
 void SimulatedAnnealing::printCurrentBoard()
 {
-  current.print();
+  solution.print();
 }
 bool SimulatedAnnealing::run()
 {
-  int currentFitnessScore = Utils::fitness(current);
-  if(currentFitnessScore == 0)
+  Logger iteration_logger;
+  Logger temp_logger;
+  if(LOG_SIMULATED_ANNEALING)
+  {
+    iteration_logger.open("./logs/iteration.txt");
+    temp_logger.open("./logs/temperature.txt");
+  }
+  
+
+  total_iteration = 0;
+  int best_neighbor_score = Utils::fitness(solution);
+  if(best_neighbor_score == 0)
   {
     return true;
   }
   double currTemperature = T;
+  Sudoku best_neighbor = solution;
   while (currTemperature > Tmin)
   {
-    for (int i = 0; i < numIterations; i++)
+    for (int i = 0; i < num_neighbors; i++)
     {
       Sudoku neighbor = getNeighbor();
       int neighborsFitnessScore = Utils::fitness(neighbor);
-      double threshold = neighborsFitnessScore < currentFitnessScore ? 1.0 : exp(-1.0 * (neighborsFitnessScore - currentFitnessScore) / currTemperature);
-
+      double threshold = neighborsFitnessScore < best_neighbor_score ? 1.0 : exp(-1.0 * (neighborsFitnessScore - best_neighbor_score) / currTemperature);
+       
       if (threshold > p)
       {
-        current = neighbor;
-        currentFitnessScore = neighborsFitnessScore;
-        cout<<"currT: "<<currTemperature<<"/"<<T<<"\tI: "<<i<<"/"<<numIterations<<"\tNew Fit: "<<currentFitnessScore<<"\tThresh: "<<threshold<<endl;
-      }
-      if (currentFitnessScore <= fStop)
-      {
-        cout<<"Stopped because currentFitnessScore <= fstop : fstop = "<<fStop<<endl;
-        return true;
-      }
+        best_neighbor = neighbor;
+        best_neighbor_score = neighborsFitnessScore;
+        //cout<<"currT: "<<currTemperature<<"/"<<T<<"\tI: "<<i<<"/"<<num_neighbors<<"\tNew Fit: "<<best_neighbor_score<<"\tThresh: "<<threshold<<endl;
+        if (best_neighbor_score == 0)
+        {
+          total_iteration += 1;
+          
+          if(LOG_SIMULATED_ANNEALING)
+          {
+            vector<double> shit;
+            shit.push_back(total_iteration);
+            shit.push_back(best_neighbor_score);
+            vector<double> holy;
+            holy.push_back(currTemperature);
+            holy.push_back(best_neighbor_score);
+            
+            iteration_logger.log(shit);
+            temp_logger.log(holy);
+          }
+
+          //cout<<"Solution Found "<<endl;  
+          solution = best_neighbor;
+          return true;
+        }
+      } 
     }
+    
+    if(LOG_SIMULATED_ANNEALING)
+    {
+      vector<double> shit;
+      shit.push_back(total_iteration);
+      shit.push_back(best_neighbor_score);
+      vector<double> holy;
+      holy.push_back(currTemperature);
+      holy.push_back(best_neighbor_score);
+      
+      iteration_logger.log(shit);
+      temp_logger.log(holy);
+    }
+    total_iteration += 1;
+    solution = best_neighbor;
     currTemperature = currTemperature * alpha; // Decreases T, cooling phase
   }
-  cout<<"Stopped because Temperature"<<endl;
+  //cout<<"Stopped because Temperature"<<endl;
   return false;
+}
+void SimulatedAnnealing::printMasked(int val)
+{
+  int size = solution.size;
+  int divider = sqrt(size);
+  for(int i = 0; i < size; i++)
+  {
+    for(int j = 0; j < size; j++)
+    {
+      string temp = to_string(solution.board[i][j]);
+      // Empty spaces are *
+      if(solution.board[i][j] == -1 || solution.board[i][j] != val)
+      {
+        cout << " * ";
+      } else if(temp.length() == 1)
+      {
+        cout << " " << solution.board[i][j] << " ";
+      } else 
+      {
+        cout << solution.board[i][j] << " ";
+      }
+      // Column divider
+      if(j % divider == divider - 1)
+      {
+        cout << "  ";
+      }
+    }
+    cout << endl;
+    // Row divider
+    if(i % divider == divider - 1)
+    {
+      cout << endl;
+    }
+  }
+
 }

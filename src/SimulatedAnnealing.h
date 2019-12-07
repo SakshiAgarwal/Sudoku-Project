@@ -1,7 +1,3 @@
-//
-// Created by Sakshi Agarwal on 11/7/19.
-//
-
 #ifndef SIMULATED_ANNEALING_H
 #define SIMULATED_ANNEALING_H
 #include <memory>
@@ -14,13 +10,15 @@
 #include <vector>
 #include "Sudoku.h"
 #include "Utils.h"
+#include "Logger.h"
 using namespace std;
 
 class SimulatedAnnealing
 {
   private: 
-    Sudoku current;
+    static const int LOG_SIMULATED_ANNEALING = false;
     vector<pair<int, int>> freePoints;
+    Sudoku solution;
 
   public:
     // Thresholding parameters -
@@ -30,15 +28,17 @@ class SimulatedAnnealing
     double T;
     double Tmin;
     double alpha;
-    int numIterations;
-    double fStop;
+    int num_neighbors;
     double p;
+    int total_iteration;
 
     SimulatedAnnealing(Sudoku inputSudoku);
-    SimulatedAnnealing(double inputT, double inputTmin, double inputAlpha, int inputNum,int inputFstop, double inputP, Sudoku inputBoard);
+    SimulatedAnnealing(double inputT, double inputTmin, double inputAlpha, int inputNeighbors, double inputP, Sudoku inputBoard);
     
     Sudoku getNeighbor();
     void printCurrentBoard();
+    void printMasked(int val);
+    bool log(vector<double> row);
 
     bool run();
 };

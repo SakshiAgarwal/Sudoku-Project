@@ -208,18 +208,22 @@ bool Backtrack::backtrack(Assignments &assigned, set<pair<int, int>> unassigned,
     return true;
   }
   pair<int, int> var = select_unassigned_var(unassigned, Y);
+  /*
   cout <<"B: "<<backtracks<<"\t U.size: "<< unassigned.size() << "\t= (" << var.first << " , " << var.second<< ")"<<endl;
   for(auto shit : Y[var.first][var.second])
   {
     cout << shit << ", ";
   }
   cout << endl;
+  */
   vector<int> domain = order_domain_vals(var, Y[var.first][var.second], unassigned, Y);
+  /*
   for(auto shit : domain)
   {
     cout << shit << ", ";
   }
   cout << endl;
+  */
   for (int i = 0; i < domain.size(); i++)
   {
     if (is_consistent(var, domain[i], assigned, C))
@@ -264,7 +268,7 @@ bool Backtrack::run(int inputSize, int** board)
       {
         for (int k = 0; k < BOARD_SIZE; k++)
         {
-          Y[i][j].push_back(k + 1);
+          Y[i][j].push_back(k);
         }
       }
       else
@@ -348,6 +352,41 @@ bool Backtrack::run(int inputSize, int** board)
       }
     }
   }
+  // AC3 on all squares
+  for(int i = 0; i < BOARD_SIZE; i++)
+  {
+    for(int j = 0; j < BOARD_SIZE; j++)
+    {
+      pair<int, int> newVar(i,j);
+      if(!AC3(assigned, unassigned, newVar, Y))
+      {
+        return false;
+      }  
+    }
+  }
+
+  
+  // print the domain of (shit, shat)
+  int shit = 2;
+  int shat = 0;
+  for(int i = 0; i < Y[shit][shat].size(); i++)
+  {
+    cout << Y[shit][shat][i] << " , ";
+  }
+  cout << endl; 
+
+  // print the domain size after initial AC3
+  for(int i = 0; i < BOARD_SIZE; i++)
+  {
+    for(int j = 0; j < BOARD_SIZE; j++)
+    {
+      cout << Y[i][j].size() << " ";
+    }
+    cout << endl;
+  }
+  cout << "========================="<<endl;
+  
+  
   // call recursive backtrack
   bool result = backtrack(assigned, unassigned, Y, C);
   for (int i = 0; i < assigned.size(); i++)
