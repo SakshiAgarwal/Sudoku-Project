@@ -114,6 +114,14 @@ Sudoku Sudoku::copy()
 {
   return Sudoku(size, board);
 }
+void Sudoku::destroy()
+{
+  for(int i = 0; i < size; i++)
+  {
+    delete board[i];
+  }
+  delete board;
+}
 
 
 /***************************
@@ -306,4 +314,11 @@ void Sudoku::test()
     } 
     cout << endl;
   }
+  a.destroy();
+  b.destroy();
+  c.destroy();
+  d.destroy();
+  e.destroy();
+  f.destroy();
+  g.destroy();
 }

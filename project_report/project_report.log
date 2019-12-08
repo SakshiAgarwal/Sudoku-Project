@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  7 DEC 2019 00:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  7 DEC 2019 18:26
 entering extended mode
 **./project_report.tex
 (project_report.tex
@@ -656,63 +656,81 @@ Underfull \hbox (badness 10000) in paragraph at lines 70--72
 
  []
 
-[2] [3] <16_100_iteration.png, id=25, 1084.05pt x 361.35pt>
-File: 16_100_iteration.png Graphic file (type png)
+[2] [3] <simulated_annealing_results.png, id=25, 1084.05pt x 361.35pt>
+File: simulated_annealing_results.png Graphic file (type png)
 
-<use 16_100_iteration.png>
-Package pdftex.def Info: 16_100_iteration.png used on input line 99.
+<use simulated_annealing_results.png>
+Package pdftex.def Info: simulated_annealing_results.png used on input line 99.
+
 (pdftex.def)             Requested size: 505.89pt x 168.62701pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--100
+<16_100_iteration.png, id=26, 1084.05pt x 361.35pt>
+File: 16_100_iteration.png Graphic file (type png)
+ <use 16_100_iteration.png>
+Package pdftex.def Info: 16_100_iteration.png used on input line 102.
+(pdftex.def)             Requested size: 505.89pt x 168.62701pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--105
 
  []
 
-[4 <./16_100_iteration.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 108--110
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--105
 
  []
 
-[5] <sample_9_by_9_domain_size.png, id=35, 451.6875pt x 451.6875pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 97--105
+
+ []
+
+[4 <./simulated_annealing_results.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 113--115
+
+ []
+
+[5 <./16_100_iteration.png>]
+<sample_9_by_9_domain_size.png, id=36, 451.6875pt x 451.6875pt>
 File: sample_9_by_9_domain_size.png Graphic file (type png)
 
 <use sample_9_by_9_domain_size.png>
-Package pdftex.def Info: sample_9_by_9_domain_size.png used on input line 133.
+Package pdftex.def Info: sample_9_by_9_domain_size.png used on input line 138.
 (pdftex.def)             Requested size: 144.54pt x 144.54294pt.
 
-Underfull \hbox (badness 3209) in paragraph at lines 138--141
+Underfull \hbox (badness 3209) in paragraph at lines 143--146
 \OT1/cmr/m/n/12 This be-cause these 4 cells have the
  []
 
 
-Underfull \hbox (badness 2376) in paragraph at lines 138--141
+Underfull \hbox (badness 2376) in paragraph at lines 143--146
 \OT1/cmr/m/n/12 of the to-tal space that needs to be
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 138--141
+Underfull \hbox (badness 10000) in paragraph at lines 143--146
 
  []
 
-[6 <./sample_9_by_9_domain_size.png>] (project_report.aux) ) 
+[6 <./sample_9_by_9_domain_size.png>] [7] (project_report.aux) ) 
 Here is how much of TeX's memory you used:
- 3979 strings out of 493323
- 51356 string characters out of 3139066
+ 3984 strings out of 493323
+ 51530 string characters out of 3139066
  130528 words of memory out of 3000000
- 7439 multiletter control sequences out of 15000+200000
+ 7443 multiletter control sequences out of 15000+200000
  10409 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,5n,32p,692b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.9/fonts/
-type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
-8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on project_report.pdf (7 pages, 302124 bytes).
+ 39i,5n,32p,692b,235s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on project_report.pdf (8 pages, 335153 bytes).
 PDF statistics:
- 67 PDF objects out of 1000 (max. 8388607)
+ 72 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -133,6 +133,9 @@ int Utils::fitness(Sudoku s)
       errors += 4 * max(0, rowCount[val] - 1);
       errors += 4 * max(0, boxCount[val] - 1);
     }
+    delete colCount;
+    delete rowCount;
+    delete boxCount;
   } 
   return errors;
 }

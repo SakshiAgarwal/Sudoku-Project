@@ -66,6 +66,7 @@ SimulatedAnnealing::SimulatedAnnealing(double inputT, double inputTmin, double i
       val += 1;
     }
   }
+  delete countMissing;
 }
 Sudoku SimulatedAnnealing::getNeighbor()
 {
@@ -106,15 +107,15 @@ bool SimulatedAnnealing::run()
   
 
   total_iteration = 0;
-  int best_neighbor_score = Utils::fitness(solution);
-  if(best_neighbor_score == 0)
+  if(Utils::fitness(solution) == 0)
   {
     return true;
   }
   double currTemperature = T;
-  Sudoku best_neighbor = solution;
   while (currTemperature > Tmin)
   {
+    int best_neighbor_score = Utils::fitness(solution);
+    Sudoku best_neighbor = solution.copy();
     for (int i = 0; i < num_neighbors; i++)
     {
       Sudoku neighbor = getNeighbor();
@@ -123,7 +124,8 @@ bool SimulatedAnnealing::run()
        
       if (threshold > p)
       {
-        best_neighbor = neighbor;
+        best_neighbor.destroy();
+        best_neighbor = neighbor.copy();
         best_neighbor_score = neighborsFitnessScore;
         //cout<<"currT: "<<currTemperature<<"/"<<T<<"\tI: "<<i<<"/"<<num_neighbors<<"\tNew Fit: "<<best_neighbor_score<<"\tThresh: "<<threshold<<endl;
         if (best_neighbor_score == 0)
@@ -142,12 +144,15 @@ bool SimulatedAnnealing::run()
             iteration_logger.log(shit);
             temp_logger.log(holy);
           }
-
-          //cout<<"Solution Found "<<endl;  
-          solution = best_neighbor;
+          
+          //cout<<"Solution Found "<<endl; 
+          solution.destroy();
+          solution = best_neighbor.copy();
+          best_neighbor.destroy();
           return true;
         }
       } 
+      neighbor.destroy();
     }
     
     if(LOG_SIMULATED_ANNEALING)
@@ -163,7 +168,9 @@ bool SimulatedAnnealing::run()
       temp_logger.log(holy);
     }
     total_iteration += 1;
-    solution = best_neighbor;
+    solution.destroy();
+    solution = best_neighbor.copy();
+    best_neighbor.destroy();
     currTemperature = currTemperature * alpha; // Decreases T, cooling phase
   }
   //cout<<"Stopped because Temperature"<<endl;

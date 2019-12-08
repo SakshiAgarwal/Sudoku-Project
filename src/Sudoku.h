@@ -26,6 +26,7 @@ class Sudoku
     Sudoku(string file_name);
     Sudoku(int input_size, int** input_board);
     Sudoku copy();
+    void destroy();
 
     // bool functions
     bool validInCol(int j, int val);

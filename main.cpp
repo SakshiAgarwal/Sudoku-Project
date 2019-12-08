@@ -26,36 +26,37 @@ void testGeneticAlgorithm(int mat[9][9])
 
 void testSimulatedAnnealing()
 {
-  
-  Logger bullshit;
-  int num_empty = 100;
-  bullshit.open_append("./logs/100.txt");
-  for(int j = 0; j < 100; j++)
+  for(int num_empty = 120; num_empty < 140; num_empty += 10)
   {
-    Sudoku a = SudokuGenerator::generateGuarantee(16, 1, num_empty);
-    SimulatedAnnealing b = SimulatedAnnealing(a);
-    b.alpha = 0.9995;
-    b.T = 4;
-    b.num_neighbors = 1000;
-    b.Tmin = 2;
-    bool result = b.run();
-    cout << j << " : " << result << " , " << b.total_iteration<< endl;
-    vector<double> shit;
-    shit.push_back(result);
-    shit.push_back(b.total_iteration);
-    bullshit.log(shit);
+    Logger bullshit;
+    bullshit.open("./logs/"+to_string(num_empty)+".txt");
+    for(int j = 0; j < 100; j++)
+    {
+      Sudoku a = SudokuGenerator::generateGuarantee(16, 1, num_empty);
+      SimulatedAnnealing b = SimulatedAnnealing(a);
+      b.alpha = 0.9995;
+      b.T = 4;
+      b.num_neighbors = 1000;
+      b.Tmin = 2;
+      bool result = b.run();
+      cout << j << " : " << result << " , " << b.total_iteration<< endl;
+      vector<double> shit;
+      shit.push_back(j);
+      shit.push_back(result);
+      shit.push_back(b.total_iteration);
+      bullshit.log(shit);
+      a.destroy();
+    }
+    bullshit.close();
   }
-  bullshit.close();
 }
 void testBacktrack()
 {
   Sudoku a = Sudoku("./boards/report_example.txt");
   a.print();
-  //cout << "=============================================================================================="<<endl;
-  //Sudoku a = SudokuGenerator::generateGuarantee(16, 1, 140);
-  //Sudoku a = Sudoku::benchmarkBoard(2);
   int result = Backtrack::run(a.size, a.board);
   cout << "RESULT: " << result << endl;
+  a.destroy();
 }
 
 int main()

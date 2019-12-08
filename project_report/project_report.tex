@@ -96,7 +96,12 @@
 		\subsection{Evaluation of Local Search with Simulated Annealing}
 			In order to evaluate this algorithm, we measure the success rate and total number of iterations given the number of empty cells in the initial Sudoku board. We measure these statistics according to the number of empty cells instead of the actual size of the board, because we hypothesize that the search-space complexity is only dependent on the number of empty cells.\\\\
 			For example, a 9 by 9 board has only 81 cells, whereas a 16 by 16 board has 256 cells. However, our neighborhood function only exchanges the values between empty cells, not the entire board. Therefore, if the 9 by 9 board had 50 empty cells and the 16 by 16 board had only 10 empty cells, we should expect that the 16 by 16 board would be solved faster. Therefore, we decided to measure the success rate and the total number of iterations by the total number of empty cells. Here are the results:\\
-			\centerline{\includegraphics[width=7in]{16_100_iteration.png}}
+			\centerline{\includegraphics[width=7in]{simulated_annealing_results.png}}\\
+			It is evident that when there are fewer number of empty cells on the board, which is equivalent to "easy" difficulty, the success rate of the algorithm is nearly $100$\% percent. However, as we increase the number of empty cells, the success rate decreases significantly. At Number of Empty Cells being 120, we nearly have $0\%$ success rate.\\\\
+			An explanation for this can be attributed to the fact that our fitness function could be improved. To understand, we analyze a single run's fitness score:\\
+			\centerline{\includegraphics[width=7in]{16_100_iteration.png}}\\
+			Above is a plot of the fitness function for a successful run of a 16 by 16 board with 90 cells empty. We notice a sharp decrease in the early stages of the run, whereas the change in fitness value from $200^{th}$ iteration on-wards is imperceptible. This is where the fitness function fails to quickly identify which neighbors are actually close to the goal state. Once in this phase where the fitness score cannot guide the local search, the search becomes almost random, resulting in failure most of the time.\\\\
+			We conclude here that to achieve better results in a scaled up environment with higher difficulty, we need to be able to develop a better fitness function that can distinguish the final few changes that remain at the end of the runs.
 	\section{Genetic Algorithm}
 		\subsection{Strength and Weaknesses of Genetic Algorithm}
 		\subsection{Description of Simulated Annealing}
