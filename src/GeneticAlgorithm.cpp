@@ -20,6 +20,7 @@ int** GeneticAlgorithm::create_gnome(int mat[Utils::N][Utils::N])
 
 GeneticAlgorithm::GeneticAlgorithm(int mat[Utils::N][Utils::N])
 {
+  generation = 0;
   for(int i=0; i<Utils::N; i++)
     for(int j=0; j<Utils::N; j++)
     {
@@ -30,12 +31,12 @@ GeneticAlgorithm::GeneticAlgorithm(int mat[Utils::N][Utils::N])
     }
 }
 
-void GeneticAlgorithm::compute(int population_size, int elitism, int eligible, float mutation, int stop)
+bool GeneticAlgorithm::compute(int population_size, int elitism, int eligible, float mutation, int stop)
 {
   srand((unsigned)(time(0)));
 
   // current generation
-  int generation = 0;
+  generation = 0;
   int f=0;
 
   vector<Individual> population;
@@ -104,4 +105,5 @@ void GeneticAlgorithm::compute(int population_size, int elitism, int eligible, f
   cout<< "Generation: " << generation-1 << "\t";
   //cout<< "String: "<< population[0].chromosome <<"\t";
   cout<< "Fitness: "<< population[0].fitness << "\n";
+  return found;
 }

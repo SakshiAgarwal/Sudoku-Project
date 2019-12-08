@@ -17,12 +17,13 @@ using namespace std;
 class GeneticAlgorithm
 {
   public:
+    int generation;
     int fixed_val[Utils::N][Utils::N];
     int mat[Utils::N][Utils::N];
 
     int **create_gnome(int mat[Utils::N][Utils::N]);
     GeneticAlgorithm(int mat[Utils::N][Utils::N]);
-    void compute(int population_size, int elitism, int eligible, float mutation, int stop);
+    bool compute(int population_size, int elitism, int eligible, float mutation, int stop);
 };
 
 #endif

@@ -365,7 +365,7 @@ bool Backtrack::run(int inputSize, int** board)
     }
   }
 
-  
+  /*
   // print the domain of (shit, shat)
   int shit = 2;
   int shat = 0;
@@ -385,10 +385,11 @@ bool Backtrack::run(int inputSize, int** board)
     cout << endl;
   }
   cout << "========================="<<endl;
-  
+  */
   
   // call recursive backtrack
   bool result = backtrack(assigned, unassigned, Y, C);
+  /*
   for (int i = 0; i < assigned.size(); i++)
   {
     board[assigned[i].first.first][assigned[i].first.second] = assigned[i].second;
@@ -409,6 +410,7 @@ bool Backtrack::run(int inputSize, int** board)
   {
     cout << "fail" << endl;
   }
+  */
   return result;
 }
 /*
