@@ -5,7 +5,7 @@ using namespace std;
 const static int SRN = 3;
 const static int N = 9;
 // Valid Genes
-const string GENES = "012345678";//9abcdefghijklmno";
+//const string GENES = "012345678";//9abcdefghijklmno";
 
 // Function to generate random numbers in given range
 int random_num(int start, int end)
@@ -16,16 +16,16 @@ int random_num(int start, int end)
 }
 
 // Create random genes for mutation
-char mutated_genes()
+char mutated_genes(int* GENES)
 {
-    int len = GENES.size();
-    int r = random_num(0, len-1);
+    //int len = GENES.size();
+    int r = random_num(0, N-1);
     //std::cout<<"Mutating gene:"<<r<<"\n";
     return GENES[r];
 }
 
 // create chromosome or string of genes
-int **create_gnome(int mat[N][N])
+int **create_gnome(int mat[N][N], int* GENES)
 {
     //int len = TARGET.size();
     int** gnome=0;
@@ -37,7 +37,7 @@ int **create_gnome(int mat[N][N])
         if(mat[i][j] != -1)
             gnome[i][j] = mat[i][j];
         else
-            gnome[i][j] = mutated_genes()-'0';
+            gnome[i][j] = mutated_genes(GENES);
     }
     return gnome;
 }
@@ -52,7 +52,7 @@ public:
     int chromosome[N][N];
     int fitness;
     Individual(int** chromosome);
-    int** mate(Individual parent2, int fixed_val[N][N], float mutation);
+    int** mate(Individual parent2, int fixed_val[N][N], float mutation, int* GENES);
     int cal_fitness();
     bool unUsedInBox(int rowStart, int colStart, int num, int i, int j);
     bool unUsedInRow(int i,int num, int j);
@@ -70,7 +70,7 @@ Individual::Individual(int** chromosome)
 };
 
 // Perform mating and produce new offspring
-int** Individual::mate(Individual par2, int fixed_val[N][N], float mutation)
+int** Individual::mate(Individual par2, int fixed_val[N][N], float mutation, int* GENES)
 {
     // chromosome for offspring
     int** child_chromosome=0;
@@ -105,7 +105,7 @@ int** Individual::mate(Individual par2, int fixed_val[N][N], float mutation)
               child_chromosome[i][j] = chromosome[i][j];
           }
           else
-              child_chromosome[i][j] = mutated_genes()-'0';
+              child_chromosome[i][j] = mutated_genes(GENES);
 
       }
 
@@ -227,6 +227,9 @@ public:
          // current generation
          int generation = 0;
          int f=0;
+         int *GENES= new int[N];
+         for(int i = 0; i < N; i++)
+            GENES[i] = i;
 
          vector<Individual> population;
          bool found = false;
@@ -235,14 +238,13 @@ public:
          for(int i = 0;i<population_size;i++)
          {
              //std::cout<<"Creating initial population:"<<i<<"\n";
-             int **gnome = create_gnome(mat);
+             int **gnome = create_gnome(mat, GENES);
              population.push_back(Individual(gnome));
-	     
-    	     for(int i=0; i<N; i++)
-    	     {
-      	         delete[] gnome[i];
-    	     }
-	     delete[] gnome;
+             for(int j=0; j<N; j++)
+    	       {
+      	         delete[] gnome[j];
+    	       }
+	           delete[] gnome;
              population[i].printSudoku();
              cout<< "Fitness: "<< population[i].fitness << "\n";
          }
@@ -299,13 +301,12 @@ public:
                  while(s == r) s = random_num(0, eligible*population_size/100);
                  //cout<< "parent "<< s<<"\n";
                  Individual parent2 = population[s];
-		 int **mate = parent1.mate(parent2, fixed_val, mutation);
+		             int **mate = parent1.mate(parent2, fixed_val, mutation, GENES);
                  Individual offspring = Individual(mate);
-
-    		 for(int i = 0; i < N; i++) {
-        	     delete[] mate[i];   
-    		 }
-    		 delete[] mate; 
+                 for(int j = 0; j < N; j++) {
+        	          delete[] mate[j];
+    		         }
+    		         delete[] mate;
                  new_generation.push_back(offspring);
              }
 

@@ -6,7 +6,7 @@
 #include <math.h>
 #include <limits.h>
 #include <algorithm>
-#include "GeneticAlgorithmV2.h"
+#include "GeneticAlgorithmV3.h"
 
 int main()
 {
@@ -39,14 +39,15 @@ int main()
     GeneticAlgorithm Board(mat);
 
 /**    Parameters for Genetic algorithm **/
-    int population_size=1000; //size of Gene pool
+    int population_size=100; //size of Gene pool
     int stop=1000000; //number of generations to run until forced to stop; to go until completion set to 0
     //!!!PLEASE use steps of 10% when adjusting the parameters below to avoid segmentation faults!!!
     int elitism=10; //best percentage of candidates go to new gen unchanged; elitism=10 -> best 10%
     int eligible=50; //best percentage of candidates get to mate for new gen; eligible=50 -> best 50%
     float mutation=0.1; //chance of random gene for offspring instead of parents'; mutation=0.1 -> 10% chance
-
-    Board.compute(population_size, elitism, eligible, mutation, stop);
+    int restarts=100; //max number of restarts
+    int restart_threshold=2500 //generation at which restart occurs
+    Board.compute(population_size, elitism, eligible, mutation, stop, restarts, restart_threshold);
 
 
    return 0;
