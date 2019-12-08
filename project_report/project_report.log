@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  8 DEC 2019 14:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  8 DEC 2019 15:18
 entering extended mode
 **./project_report.tex
 (project_report.tex
@@ -693,47 +693,48 @@ Underfull \hbox (badness 10000) in paragraph at lines 97--115
 
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 [4 <./simulated_annealing_results.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 123--125
+Underfull \hbox (badness 10000) in paragraph at lines 125--127
 
  []
 
 [5 <./16_100_iteration.png>]
-<sample_9_by_9_domain_size.png, id=36, 451.6875pt x 451.6875pt>
-File: sample_9_by_9_domain_size.png Graphic file (type png)
-
-<use sample_9_by_9_domain_size.png>
-Package pdftex.def Info: sample_9_by_9_domain_size.png used on input line 148.
-(pdftex.def)             Requested size: 144.54pt x 144.54294pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 153--156
+Underfull \hbox (badness 10000) in paragraph at lines 136--138
 
  []
 
-[6 <./sample_9_by_9_domain_size.png>]
-<backtrack.png, id=43, 1084.05pt x 361.35pt>
+[6] <sample_9_by_9_domain_size.png, id=41, 451.6875pt x 451.6875pt>
+File: sample_9_by_9_domain_size.png Graphic file (type png)
+
+<use sample_9_by_9_domain_size.png>
+Package pdftex.def Info: sample_9_by_9_domain_size.png used on input line 161.
+(pdftex.def)             Requested size: 144.54pt x 144.54294pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 166--169
+
+ []
+
+[7 <./sample_9_by_9_domain_size.png>]
+<backtrack.png, id=46, 1084.05pt x 361.35pt>
 File: backtrack.png Graphic file (type png)
  <use backtrack.png>
-Package pdftex.def Info: backtrack.png used on input line 164.
+Package pdftex.def Info: backtrack.png used on input line 177.
 (pdftex.def)             Requested size: 505.89pt x 168.62701pt.
 
-Overfull \hbox (52.9221pt too wide) in paragraph at lines 164--165
+Overfull \hbox (52.9221pt too wide) in paragraph at lines 177--178
  [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--170
+Underfull \hbox (badness 10000) in paragraph at lines 174--183
 
  []
 
-[7 <./backtrack.png>] [8] (project_report.aux) ) 
+[8 <./backtrack.png>] [9] (project_report.aux) ) 
 Here is how much of TeX's memory you used:
  3989 strings out of 493323
  51614 string characters out of 3139066
- 131528 words of memory out of 3000000
+ 130528 words of memory out of 3000000
  7447 multiletter control sequences out of 15000+200000
  10409 words of font info for 39 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -746,9 +747,9 @@ nts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
 pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on project_report.pdf (9 pages, 368313 bytes).
+Output written on project_report.pdf (10 pages, 370131 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
+ 80 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

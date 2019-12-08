@@ -95,28 +95,41 @@
 				The fitness function implemented here involves determining whether an integer is repeated or is not present in a particular row, column, or the sub-grid. A fitness value is assigned to a possible solution based on the number of repeated or non-present integers. The more repeated or non-present integers there are in a solution's rows, columns, and sub-grid, the higher the fitness value assigned to that solution. Ultimately, the goal state would have a fitness score of 0, because it will not have any repeated or non-present integers.
 		\subsection{Evaluation of Local Search with Simulated Annealing}
 			In order to evaluate this algorithm, we measure the success rate and total number of iterations given the number of empty cells in the initial Sudoku board. We measure these statistics according to the number of empty cells instead of the actual size of the board, because we hypothesize that the search-space complexity is only dependent on the number of empty cells.\\\\
-			For example, a 9 by 9 board has only 81 cells, whereas a 16 by 16 board has 256 cells. However, our neighborhood function only exchanges the values between empty cells, not the entire board. Therefore, if the 9 by 9 board had 50 empty cells and the 16 by 16 board had only 10 empty cells, we should expect that the 16 by 16 board would be solved faster. Therefore, we decided to measure the success rate and the total number of iterations by the total number of empty cells. Here are the results:
+			For example, a 9 by 9 board has only 81 cells, whereas a 16 by 16 board has 256 cells. However, our neighborhood function only exchanges the values between empty cells, not the entire board. Therefore, if the 9 by 9 board had 50 empty cells and the 16 by 16 board had only 10 empty cells, we should expect that the 16 by 16 board would be solved faster. Therefore, we decided to measure the success rate and the total number of iterations by the total number of empty cells. Here are the results:\\
 			\begin{figure}[h]
 			\begin{center} 
 				\includegraphics[width=7in]{simulated_annealing_results.png}
 				\caption{Success Rate and Number of Iterations for Local Search} 
 			\end{center} 
-			\end{figure}
+			\end{figure}\\
 			It is evident that when there are fewer number of empty cells on the board, which is equivalent to "easy" difficulty, the success rate of the algorithm is nearly $100$\% percent. However, as we increase the number of empty cells, the success rate decreases significantly. At Number of Empty Cells being 120, we nearly have $0\%$ success rate.\\\\
-			An explanation for this can be attributed to the fact that our fitness function could be improved. To understand, we analyze a single run's fitness score:
+			An explanation for this can be attributed to the fact that our fitness function could be improved. To understand, we analyze a single run's fitness score:\\
 			\begin{figure}[h]
 				\begin{center} 
 					\includegraphics[width=7in]{16_100_iteration.png}
 					\caption{Change in Fitness Value over Iterations} 
 				\end{center} 
-			\end{figure}
+			\end{figure}\\
 			Above is a plot of the fitness function for a successful run of a 16 by 16 board with 90 cells empty. We notice a sharp decrease in the early stages of the run, whereas the change in fitness value from $200^{th}$ iteration on-wards is imperceptible. This is where the fitness function fails to quickly identify which neighbors are actually close to the goal state. Once in this phase where the fitness score cannot guide the local search, the search becomes almost random, resulting in failure most of the time.\\\\
 			We conclude here that to achieve better results in a scaled up environment with higher difficulty, we need to be able to develop a better fitness function that can distinguish the final few changes that remain at the end of the runs.
 	\section{Genetic Algorithm}
+		The second algorithm that we implemented is a genetic algorithm. 
 		\subsection{Strength and Weaknesses of Genetic Algorithm}
-		\subsection{Description of Simulated Annealing}
+			Genetic algorithm is similar to the above local search with simulated annealing algorithm in that  they are both stochastic search methods. Therefore, we can expect this algorithm to have relatively small space requirements and able to prevent being stuck in a local minima. However, the genetic algorithm differs from the previous algorithm in 2 major ways:
+			\begin{enumerate}
+				\item Population of candidates instead of a single neighbor
+				\item Mutation function instead of neighboring function
+			\end{enumerate}
+			As you can tell from the word choices, this algorithm is inspired by the process of natural selection. The details of the implementation are explained further below, but overall, this algorithm attempts to introduce an increased amount of variability per iteration by having a group of board configuration instead of having a single individual.
+		\subsection{Description of a Population and its Mating Process}
+			The goal of this algorithm is to maintain a fixed size of a population of Sudoku board configurations in every generation, while continuously improving the overall "fitness" score. Because every iteration consists of this population, we will refer to them as a generation and a member of a generation as an individual.\\\\
+			First, given a generation, we proceed to score every individual in the generation via the fitness function mentioned in the previous section. Secondly, we randomly choose pairs of individuals from the generation to mate and produce the next generation. However, we bias this selection process so that it is more likely to select the individuals with better fitness score more often. Here is the exact outline of the algorithm:
 			\subsubsection{General Outline of the Algorithm}
+			\subsubsection{Initialization}
+			\subsubsection{Mate Selection}
+			\subsubsection{Mutation Function}
 		\subsection{Evaluation of Genetic Algorithm}
+			Similar to the way we evaluated the local search algorithm before, we measure the success rate and the number of generations from the genetic algorithm. Here are the results:
 	\section{Backtracking Algorithm}
 		Last algorithm that we implemented is a non-stochastic backtracking algorithm with Arc consistency, Minimum Remaining Value ordering (MRV), and Least Constraining Value (LCV) selection.
 		\subsection{Strength and Weaknesses of Backtracking Algorithm}
@@ -145,7 +158,7 @@
 			\subsubsection{Minimum Remaining Value Order}
 				\begin{wrapfigure}{r}{0.5\textwidth}
 					\begin{center}
-						\raisebox{0pt}[\dimexpr\height-4.0\baselineskip\relax]{\includegraphics[width=2in]{sample_9_by_9_domain_size.png}}
+						\raisebox{0pt}[\dimexpr\height-1.0\baselineskip\relax]{\includegraphics[width=2in]{sample_9_by_9_domain_size.png}}
 					\end{center}
 					\caption{Possible Domain Sizes}
 				\end{wrapfigure}
@@ -164,7 +177,7 @@
 					\includegraphics[width=7in]{backtrack.png}
 					\caption{Number of Backtracks for Every Difficulty of the Sudoku Board} 
 				\end{center} 
-			\end{figure}
+			\end{figure}\\
 			First thing to notice is that the number of backtracks is nearly 0 up until 130 empty cells. This is because most of these cases the Arc consistency algorithm solves most of the puzzle, and there are no need for any backtracking. However, as soon as the number of empty cells grows beyond 140, the number of backtracking grows exponentially. At 150 empty cells, the backtracking algorithm nearly takes on average about $41,000$ backtracks. This is equivalent to 2 minutes depended on the clock cycle speed of the environment. At this rate, at 160 cells removed, the algorithm is expected to take over 300,000 backtracks which takes about 20 minutes. When considering the worst case scenario, the algorithm could take over a million backtracks, which would take about an hour and 15 minutes.\\\\
 			Although backtracking algorithm performs better than local search with simulated annealing, backtracking algorithm fails to scale up to the difficulty of the Sudoku puzzle we want to solve. Our goal is a 25 by 25 board which can have up to 625 cells empty. We expect that developing a better heuristic might be able to improve the algorithm slightly, but the ability to scale up to 600+ empty cells seems implausible for backtracking algorithm.
 	\section{Conclusion}
