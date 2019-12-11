@@ -2,8 +2,8 @@
 //#include "Sudoku.h"
 using namespace std;
 
-const static int SRN = 4;
-const static int N = 16;
+const static int SRN = 3;
+const static int N = 9;
 // Valid Genes
 //const string GENES = "012345678";//9abcdefghijklmno";
 
@@ -350,9 +350,8 @@ public:
        //Phase2: GA
        bool found = false, restart = false;
        vector<Individual> persistent_population;
-
        int restart_count=0, total_generation=0;
-       while((!found))
+       while((!found) && restart_count<restarts)
        {
            restart = false;
            // current generation
@@ -418,21 +417,19 @@ public:
                //std::cout<<"New gen population 0 before cross:\n";
                //new_generation[0].printSudoku();
                if(new_generation[0].fitness!=f){
-                   restart_count = 0;
                    f=new_generation[0].fitness;
                    cout<< "Generation: " << generation << "\t\t";
                    cout<< "Fitness: "<< new_generation[0].fitness << "\n";
                }
-               restart_count++;
-               if(restart_count >= restart_threshold){
+               if(generation != 0 && generation%restart_threshold == 0){
                    //f=new_generation[0].fitness;
-                   cout<< "RESTARTING: \n";
+                   cout<< "Generation: " << generation << "\t\t";
+                   cout<< "Fitness: "<< new_generation[0].fitness << "\n";
                    restart=true;
-                   int selection = population_size/10;
+                   restart_count++;
                    if(persistent_population.size()<population_size){
-                     for(int i=0; i<selection; i++)
+                     for(int i=0; i<population_size/10; i++)
                         persistent_population.push_back(new_generation[i]);
-                        sort(persistent_population.begin(), persistent_population.end());
                    }
                }
                //cout<< "Fitness: "<< new_generation[0].fitness << "\n";
@@ -493,33 +490,19 @@ public:
                generation++;
                total_generation++;
                if(stop != 0)
-                if(total_generation > stop)
+                if(generation > stop)
                   break;
           }
-          cout<< "Generation: " << generation-1 << "\n";
+          cout<< "Generation: " << generation-1 << "\t";
           //cout<< "String: "<< population[0].chromosome <<"\t";
           population[0].printSudoku();
-          cout<< "Fitness: "<< population[0].fitness << "\n\n";
-          if(persistent_population.size()<=0){
-            if(population[0].fitness<=persistent_population[0].fitness){
-              Individual best=population[0];
-            }else{
-              Individual best=persistent_population[0];
-            }
-          }else{
-            Individual best=population[0];
-          }
+          cout<< "Fitness: "<< population[0].fitness << "\n";
+
          for(int i = 0;i<population_size;i++)
          {
   	        population.pop_back();
   	     }
-         if(stop != 0)
-          if(total_generation > stop){
-            best.printSudoku();
-            cout<< "Fitness: "<< best.fitness << "\n\n";
-          }
-            break;
       }
-      cout<< "Total Generations: " << total_generation-1 << "\n";
+      cout<< "Total Generations: " << total_generation-1 << "\t";
 }
 };
