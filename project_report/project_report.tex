@@ -125,8 +125,37 @@
 			The goal of this algorithm is to maintain a fixed size of a population of Sudoku board configurations in every generation, while continuously improving the overall "fitness" score. Because every iteration consists of this population, we will refer to them as a generation and a member of a generation as an individual.\\\\
 			First, given a generation, we proceed to score every individual in the generation via the fitness function mentioned in the previous section. Secondly, we randomly choose pairs of individuals from the generation to mate and produce the next generation. However, we bias this selection process so that it is more likely to select the individuals with better fitness score more often. Here is the exact outline of the algorithm:
 			\subsubsection{General Outline of the Algorithm}
+			Here is the general outline of the local search with Genetic Algorithm:
+				\begin{enumerate}
+					\item Phase 1:
+					\begin{enumerate}
+						\item Fill in obvious board values.
+					\end{enumerate}
+					\item Phase 2:
+					\begin{enumerate}
+						\item Repeat.
+						\begin{enumerate}
+							\item Generate initial population.													\item Repeat.
+							\begin{enumerate}
+								\item Rank solutions in terms of fitness and only retain the top percentage specified by the selection rate.
+								\item Repeat.
+								\item Randomly select two individuals from the population	.
+								\item Randomly choose a crossover point	.											\item Recombine the solutions to produce two new solution strings.
+								\item Apply the mutation operator to the solutions.
+
+								\item Until a new population has been generated.
+							\end{enumerate}
+							\item Until a solution has been found, or the restart threshold has been reached.
+						\end{enumerate}
+						\item Until a solution has been found, or the maximum number of generations has been reached.
+					\end{enumerate}
+				\end{enumerate} 
 			\subsubsection{Initialization}
+			The Algorithm's initialization is split between the 2 phases of the algorithm and consists of filling in "obvious" board cells, and in the second phase, generating random board configurations to create the population.\\\\
+			An "obvious" cell is described as an empty cell that has only one possible solution (cell value that does not violate Sudoku rules), or if a row/column/subset of the sudoku board has only one possible value in that respective cell, then that cell is filled with the value. These are also known as "Norvig's basic Sudoku rules", and have been integrated to constrain the search space to fewer values, where possible.\\\\
+			Afterwards, the board is split into N subset, each subset represents one of the board's square regions. For each of these subsets, a random permutation is generated. This permutation does not change the board's fixed values.
 			\subsubsection{Mate Selection}
+			
 			\subsubsection{Mutation Function}
 		\subsection{Evaluation of Genetic Algorithm}
 			Similar to the way we evaluated the local search algorithm before, we measure the success rate and the number of generations from the genetic algorithm. Here are the results:
