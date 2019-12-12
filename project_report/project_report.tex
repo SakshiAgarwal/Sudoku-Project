@@ -174,7 +174,17 @@
 			\subsubsection{Restart Heuristic}
 			The program implements a restart heuristic in an attempt to escape local maxima. Upon reaching a certain number of generations without improving on the best fitness of the population, the algorithm will store the $best 10\%$ of the individuals in a separate population. Once every 10 restarts the algorithm will this separate population and use it as the initial population for the algorithm.	
 			\subsection{Evaluation of Genetic Algorithm}
-			Similar to the way we evaluated the local search algorithm before, we measure the success rate and the number of generations from the genetic algorithm. Here are the results:
+			To understand the performance of the algorithm, we analyze a single run of the algorithm on a board with 20 empty cells:
+			\begin{figure}[h]
+				\begin{center} 
+					\includegraphics[width=4in]{genetic_algorithm_results.png}
+					\caption{Genetic Algorithm's Minimum Fitness Score per Generation} 
+					\label{fig:crossover}
+				\end{center} 
+			\end{figure}\\
+			We can see that Norvig's initialization algorithm allows the minimum fitness score of the very first generation to be pretty low at $4$. However, we can see that the minimum does not change for the next 8 generations until it finally drops to $0$ at 10th generation. This is because the mating function does not guarantee a better fit child, thus the chances of finding a lower fitness score every iteration is very low. This is understandable, because a random combination of two fit parents does not necessarily guarantee a fit child.\\\\
+			Lastly, we observed that the scalability of the genetic algorithm is poor. The reason why we ran the above test only on a 20 empty cell board is because a reproducible results only occur at around 20. At 50, the algorithm may solve it in 1 generation or in a 100 generations. And at 100+ boards, we observe that we never converge to a solution.\\\\
+			We note here that 1 possible improvement to this algorithm is to reduce the randomness by guaranteeing the child of a mating process to have a better fitness score. This will may result in running into a local minima, but the restart process should be able to prevent the algorithm from failing.
 	\section{Backtracking Algorithm}
 		Last algorithm that we implemented is a non-stochastic backtracking algorithm with Arc consistency, Minimum Remaining Value ordering (MRV), and Least Constraining Value (LCV) selection.
 		\subsection{Strength and Weaknesses of Backtracking Algorithm}
@@ -226,4 +236,31 @@
 			First thing to notice is that the number of backtracks is nearly 0 up until 130 empty cells. This is because most of these cases the Arc consistency algorithm solves most of the puzzle, and there are no need for any backtracking. However, as soon as the number of empty cells grows beyond 140, the number of backtracking grows exponentially. At 150 empty cells, the backtracking algorithm nearly takes on average about $41,000$ backtracks. This is equivalent to 2 minutes depended on the clock cycle speed of the environment. At this rate, at 160 cells removed, the algorithm is expected to take over 300,000 backtracks which takes about 20 minutes. When considering the worst case scenario, the algorithm could take over a million backtracks, which would take about an hour and 15 minutes.\\\\
 			Although backtracking algorithm performs better than local search with simulated annealing, backtracking algorithm fails to scale up to the difficulty of the Sudoku puzzle we want to solve. Our goal is a 25 by 25 board which can have up to 625 cells empty. We expect that developing a better heuristic might be able to improve the algorithm slightly, but the ability to scale up to 600+ empty cells seems implausible for backtracking algorithm.
 	\section{Conclusion}
+		The Sudoku problem was a good way to take a better look at the trade-offs of different Constraint Satisfaction Problem, and to tackle it we implemented 3 algorithms:
+		\begin{enumerate}
+			\item local search with Simulated Annealing
+			\item genetic algorithm
+			\item backtracking algorithm
+		\end{enumerate}
+		Among these algorithms, here are the key differences among these algorithms:
+		\begin{enumerate}
+			\item Stochastic vs Deterministic
+			\item Local vs Non-Local 
+		\end{enumerate}
+		The strength of the deterministic backtracking algorithm was the guarantee of a valid output. The algorithm either terminates with a solved board or identifies it to be unsolvable. However, stochastic algorithms may terminate inconclusive when it reaches a local optima.\\\\
+		The weakness of the deterministic algorithm is that it has to search through an exponential amount of board configurations. Even though the heuristic functions like MRV sorted the search space, the algorithm still had difficulties when we scale the size of the problem up to 25x25 boards or with many empty cells.\\\\		
+		On the other hand, the strength of a stochastic algorithms was the memory usage. Because we only needed to have a current state and a neighboring state at any given moment in the algorithm, the memory space was constant at $O(c)$. However, the memory complexity grows linearly or exponentially for deterministic search algorithm, because we need to remember the states that we need to go back to.\\\\		
+		Also in this paper, the difference between local and non-local search scheme was explored. Because local search solves Sudoku a small increment at a time, we can observe a slow, but guaranteed improvement every iteration. However, non-local search scheme behaves very unpredictably because we cannot guarantee the improvement of the fitness score for every iteration (generation). These properties mean that the genetic algorithm is much more randomized compared to simulated annealing.\\\\ 		
+		We note that a possible improved solution to Sudoku problem may be a hybrid of the backtracking and local search algorithms. We would begin the algorithm by running local search to get a nearly solved board, then the rest of board will be solved using backtracking. This utilizes the strengths of both algorithms. Local search's fast convergence in the early phase and backtracking's guaranteed solution in the later phase should improve the overall search time.
+	\section{References}
+		\begin{enumerate}
+			\item Russell, S. J., \& Norvig, P. (2021). Artificial intelligence: a modern approach. Hoboken: Pearson.
+		\end{enumerate}
+	\section{Appendix}
+		\subsection{Running the code}
+			The project is written in C++, and the project must be ran using a GNU compiler. We provide a makefile to compile the code. Run 
+			$$make main$$
+			and to run the project run
+			$$./main$$
+			Note that the current file runs tests. If you want to run specific board configurations, please reach out to our team.
 \end{document}
