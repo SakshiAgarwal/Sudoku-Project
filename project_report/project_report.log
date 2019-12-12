@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  8 DEC 2019 15:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6350 64-bit) (preloaded format=pdflatex 2017.11.4)  11 DEC 2019 12:46
 entering extended mode
 **./project_report.tex
 (project_report.tex
@@ -656,7 +656,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 70--72
 
  []
 
-[2] [3] <simulated_annealing_results.png, id=25, 1084.05pt x 361.35pt>
+[2] [3] <simulated_annealing_results.png, id=27, 1084.05pt x 361.35pt>
 File: simulated_annealing_results.png Graphic file (type png)
 
 <use simulated_annealing_results.png>
@@ -668,7 +668,7 @@ Overfull \hbox (52.9221pt too wide) in paragraph at lines 101--102
  [] 
  []
 
-<16_100_iteration.png, id=26, 1084.05pt x 361.35pt>
+<16_100_iteration.png, id=28, 1084.05pt x 361.35pt>
 File: 16_100_iteration.png Graphic file (type png)
  <use 16_100_iteration.png>
 Package pdftex.def Info: 16_100_iteration.png used on input line 109.
@@ -747,7 +747,7 @@ nts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
 pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Fi
 les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on project_report.pdf (10 pages, 370131 bytes).
+Output written on project_report.pdf (10 pages, 370331 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
