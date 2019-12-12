@@ -171,7 +171,9 @@
 			\end{figure}\\
 			\subsubsection{Mutation Function}
 			The mutation algorithm performs as follows. Based on the mutation factor, there is a probabilistic chance that a mutation might occur in an offspring. If a mutation is to occur, a region is randomly selected for the mutation, and then two cells from that region are randomly selected to switch places, if either of the two cells is fixed, then another pair of cells is selected from this region until a mutation occurs.
-		\subsection{Evaluation of Genetic Algorithm}
+			\subsubsection{Restart Heuristic}
+			The program implements a restart heuristic in an attempt to escape local maxima. Upon reaching a certain number of generations without improving on the best fitness of the population, the algorithm will store the $best 10\%$ of the individuals in a separate population. Once every 10 restarts the algorithm will this separate population and use it as the initial population for the algorithm.	
+			\subsection{Evaluation of Genetic Algorithm}
 			Similar to the way we evaluated the local search algorithm before, we measure the success rate and the number of generations from the genetic algorithm. Here are the results:
 	\section{Backtracking Algorithm}
 		Last algorithm that we implemented is a non-stochastic backtracking algorithm with Arc consistency, Minimum Remaining Value ordering (MRV), and Least Constraining Value (LCV) selection.
