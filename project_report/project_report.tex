@@ -12,6 +12,7 @@
 \usepackage{graphicx}
 \usepackage{wrapfig}
 \usepackage{titlesec}
+\usepackage{hyperref}
 
 \begin{document}
 	\begin{titlepage}
@@ -123,7 +124,8 @@
 			As you can tell from the word choices, this algorithm is inspired by the process of natural selection. The details of the implementation are explained further below, but overall, this algorithm attempts to introduce an increased amount of variability per iteration by having a group of board configuration instead of having a single individual.
 		\subsection{Description of a Population and its Mating Process}
 			The goal of this algorithm is to maintain a fixed size of a population of Sudoku board configurations in every generation, while continuously improving the overall "fitness" score. Because every iteration consists of this population, we will refer to them as a generation and a member of a generation as an individual.\\\\
-			First, given a generation, we proceed to score every individual in the generation via the fitness function mentioned in the previous section. Secondly, we randomly choose pairs of individuals from the generation to mate and produce the next generation. However, we bias this selection process so that it is more likely to select the individuals with better fitness score more often. Here is the exact outline of the algorithm:
+			First, given a generation, we proceed to score every individual in the generation via the fitness function mentioned in the previous section. Secondly, we randomly choose pairs of individuals from the generation to mate and produce the next generation. However, we bias this selection process so that it is more likely to select the individuals with better fitness score more often.\\\\
+			In order to avoid getting stuck in local maxima, restart heuristics, with best individuals tracking has been added to the genetic algorithm.
 			\subsubsection{General Outline of the Algorithm}
 			Here is the general outline of the local search with Genetic Algorithm:
 				\begin{enumerate}
@@ -140,7 +142,7 @@
 								\item Rank solutions in terms of fitness and only retain the top percentage specified by the selection rate.
 								\item Repeat.
 								\item Randomly select two individuals from the population	.
-								\item Randomly choose a crossover point	.											\item Recombine the solutions to produce two new solution strings.
+								\item Randomly choose a crossover point.												\item Recombine the solutions to produce two new solution strings.
 								\item Apply the mutation operator to the solutions.
 
 								\item Until a new population has been generated.
@@ -155,8 +157,20 @@
 			An "obvious" cell is described as an empty cell that has only one possible solution (cell value that does not violate Sudoku rules), or if a row/column/subset of the sudoku board has only one possible value in that respective cell, then that cell is filled with the value. These are also known as "Norvig's basic Sudoku rules", and have been integrated to constrain the search space to fewer values, where possible.\\\\
 			Afterwards, the board is split into N subset, each subset represents one of the board's square regions. For each of these subsets, a random permutation is generated. This permutation does not change the board's fixed values.
 			\subsubsection{Mate Selection}
-			
+			For each member of the population a "fitness" score is given, to determine how close it is to the solution, using a fitness function. This fitness function computes the individual's score, by counting the number of "genes"(cells) in the individual's configuration that violate the Sudoku rules. A lower fitness score denotes a better individual\\\\
+			Once calculated, the population is sorted in increasing order of fitness, and based on the selection rate parameter, the top $<selection\_rate>\%$ of individuals are selected for mating. The members of selected part of the population, have a probabilistic chance of being chosen, such that even less ideal candidates have a chance to mate.\\\\
+			The Algorithm chooses the elite (top $<elite>\%$ of the population) and passes them on to the next generation. For the rest of next generation's population, the algorithm generates offspring by crossing randomly chosen pairs of distinct individuals from the selection pool.
+			\subsubsection{Crossover Function}
+			Once a pair is selected for mating, the program chooses a crossover point at random. The crossover takes place at the region level, thus for a NxN sudoku board, with N regions, there are 8 possible crossover points. The resulting offspring, as seen in the figure below, is then added to the next generation's population.
+			\begin{figure}[h]
+				\begin{center} 
+					\includegraphics[width=6in]{Crossover.png}
+					\caption{9x9 Crossover Example} 
+					\label{fig:crossover}
+				\end{center} 
+			\end{figure}\\
 			\subsubsection{Mutation Function}
+			The mutation algorithm performs as follows. Based on the mutation factor, there is a probabilistic chance that a mutation might occur in an offspring. If a mutation is to occur, a region is randomly selected for the mutation, and then two cells from that region are randomly selected to switch places, if either of the two cells is fixed, then another pair of cells is selected from this region until a mutation occurs.
 		\subsection{Evaluation of Genetic Algorithm}
 			Similar to the way we evaluated the local search algorithm before, we measure the success rate and the number of generations from the genetic algorithm. Here are the results:
 	\section{Backtracking Algorithm}
