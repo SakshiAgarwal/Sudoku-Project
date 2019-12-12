@@ -1,9 +1,10 @@
 //#include <bits/stdc++.h>
-//#include "Sudoku.h"
+#include "Sudoku.h"
+#include <math.h>       /* sqrt */
 using namespace std;
-
-const static int SRN = 3;
-const static int N = 9;
+//
+// const static int SRN = 3;
+// const static int N = 9;
 // Valid Genes
 //const string GENES = "012345678";//9abcdefghijklmno";
 
@@ -16,7 +17,7 @@ int random_num(int start, int end)
 }
 
 // Create random genes for mutation
-char mutated_genes(int* GENES)
+char mutated_genes(int* GENES, int N)
 {
     //int len = GENES.size();
     int r = random_num(0, N-1);
@@ -25,7 +26,7 @@ char mutated_genes(int* GENES)
 }
 
 // //check box when generating values
-bool inBox(int** gnome, int rowStart, int colStart, int num, int x, int y)
+bool inBox(int** gnome, int rowStart, int colStart, int num, int x, int y, int SRN)
 {
   //std::cout<<"colStart: "<<colStart<<"\n";
   //std::cout<<"rowStart: "<<rowStart<<"\n";
@@ -43,9 +44,10 @@ bool inBox(int** gnome, int rowStart, int colStart, int num, int x, int y)
     }
   return true;
 }
+typedef vector<vector<int> > Matrix;
 
 // create chromosome or string of genes
-int **create_gnome(int mat[N][N], int* GENES)
+int **create_gnome(Matrix mat, int* GENES, int N, int SRN)
 {
     //int len = TARGET.size();
     int** gnome=0;
@@ -67,9 +69,9 @@ int **create_gnome(int mat[N][N], int* GENES)
       {
         if(mat[i][j] == -1)
           do{
-             gnome[i][j] = mutated_genes(GENES);
+             gnome[i][j] = mutated_genes(GENES, N);
              //std::cout<< "In box: ("<<i<<")("<<j<<")"<<gnome[i][j]<<"\n";
-          }while (!inBox(gnome, i-i%SRN, j - j%SRN, gnome[i][j], i, j));
+          }while (!inBox(gnome, i-i%SRN, j - j%SRN, gnome[i][j], i, j, SRN));
       }
     }
     return gnome;
@@ -82,28 +84,33 @@ class Individual
     // const static int N = 9;
     // const static int SRN = 3;
 public:
-    int chromosome[N][N];
+    typedef vector<vector<int> > Matrix;
+    Matrix chromosome;
     int fitness;
-    Individual(int** chromosome);
-    int** mate(Individual parent2, int fixed_val[N][N], float mutation, int* GENES);
-    int cal_fitness();
-    bool unUsedInBox(int rowStart, int colStart, int num, int i, int j);
-    bool unUsedInRow(int i,int num, int j);
-    bool unUsedInCol(int j,int num, int i);
-    bool CheckIfSafe(int i,int j,int num);
-    void printSudoku();
+    Individual(int size, int** chromosome);
+    int** mate(Individual parent2, Matrix fixed_val, int N, int SRN, float mutation, int* GENES);
+    int cal_fitness(int N);
+    bool unUsedInBox(int rowStart, int colStart, int num, int i, int j, int N, int SRN);
+    bool unUsedInRow(int i,int num, int j, int N);
+    bool unUsedInCol(int j,int num, int i, int N);
+    bool CheckIfSafe(int i,int j,int num, int N, int SRN);
+    void printSudoku(int N);
 };
 
-Individual::Individual(int** chromosome)
+Individual::Individual(int size, int** chromosome)
 {
-    for(int i=0; i<N; i++)
-      for(int j=0; j<N; j++)
+    this->chromosome.resize(size);
+    for(int i=0; i<size; i++)
+    {
+      this->chromosome[i].resize(size);
+      for(int j=0; j<size; j++)
         this->chromosome[i][j] = chromosome[i][j];
-    fitness = cal_fitness();
+    }
+    fitness = cal_fitness(size);
 };
 
 // Perform mating and produce new offspring
-int** Individual::mate(Individual par2, int fixed_val[N][N], float mutation, int* GENES)
+int** Individual::mate(Individual par2, Matrix fixed_val, int N, int SRN, float mutation, int* GENES)
 {
     // chromosome for offspring
     int** child_chromosome=0;
@@ -167,10 +174,11 @@ int** Individual::mate(Individual par2, int fixed_val[N][N], float mutation, int
 // Calculate fittness score, it is the number of
 // characters in string which differ from target
 // string.
-int Individual::cal_fitness()
+int Individual::cal_fitness(int N)
 {
     //int len = TARGET.size();
     int fitness = 0;
+    int SRN=(int)sqrt(N);
     for(int i=0; i<N; i++)
       for(int j=0; j<N; j++)
       {
@@ -181,7 +189,7 @@ int Individual::cal_fitness()
         //   std::cout<<"unUsedInCol: "<<unUsedInCol(j, chromosome[i][j], i)<<"\n";
         //   std::cout<<"unUsedInBox: "<<unUsedInBox(i-i%SRN, j-j%SRN, chromosome[i][j], i, j)<<"\n";
         // }
-          if(!CheckIfSafe(i, j, chromosome[i][j]))
+          if(!CheckIfSafe(i, j, chromosome[i][j], N, SRN))
               fitness++;
       }
     return fitness;
@@ -194,7 +202,7 @@ bool operator<(const Individual &ind1, const Individual &ind2)
 }
 
 // check in the box for existence
-bool Individual::unUsedInBox(int rowStart, int colStart, int num, int x, int y)
+bool Individual::unUsedInBox(int rowStart, int colStart, int num, int x, int y, int N, int SRN)
 {
     for (int i = 0; i<SRN; i++)
       for (int j = 0; j<SRN; j++)
@@ -209,7 +217,7 @@ bool Individual::unUsedInBox(int rowStart, int colStart, int num, int x, int y)
 }
 
 // check in the row for existence
-bool Individual::unUsedInRow(int i,int num, int y)
+bool Individual::unUsedInRow(int i,int num, int y, int N)
 {
     for (int j = 0; j<N; j++)
       if(j != y)
@@ -219,7 +227,7 @@ bool Individual::unUsedInRow(int i,int num, int y)
 }
 
 // check in the column for existence
-bool Individual::unUsedInCol(int j,int num, int x)
+bool Individual::unUsedInCol(int j,int num, int x, int N)
 {
     for (int i = 0; i<N; i++)
       if(i != x)
@@ -229,15 +237,15 @@ bool Individual::unUsedInCol(int j,int num, int x)
 }
 
 // check if num is safe to put at (i,j)
-bool Individual::CheckIfSafe(int i,int j,int num)
+bool Individual::CheckIfSafe(int i,int j,int num, int N, int SRN)
 {
     //std::cout<<"CheckIfSafe num value: "<<num<<"\n";
-    return (unUsedInRow(i, num, j) &&
-            unUsedInCol(j, num, i) &&
-            unUsedInBox(i-i%SRN, j-j%SRN, num, i, j));
+    return (unUsedInRow(i, num, j, N) &&
+            unUsedInCol(j, num, i, N) &&
+            unUsedInBox(i-i%SRN, j-j%SRN, num, i, j, N, SRN));
 }
 
-void Individual::printSudoku()
+void Individual::printSudoku(int N)
 {
     std::cout<<"Printing sudoku matrix ------- \n";
     for (int i = 0; i<N; i++)
@@ -254,24 +262,50 @@ class GeneticAlgorithm
   // const static int N = 9;
   // const static int SRN = 3;
 public:
-  int fixed_val[N][N];
-  int mat[N][N];
+  int N;
+  typedef vector<vector<int> > Matrix;
+  int generation;
+  // int fixed_val[N][N];
+  // int mat[N][N];
 
-  GeneticAlgorithm(int mat[N][N])
+  // GeneticAlgorithm(int mat[N][N])
+  // {
+  //   for(int i=0; i<N; i++)
+  //     for(int j=0; j<N; j++)
+  //     {
+  //       if(mat[i][j]!=-1)
+  //         this->fixed_val[i][j] = 1;
+  //
+  //       this->mat[i][j] = mat[i][j];
+  //     }
+  // }
+  bool run(int inputSize, int** board, int population_size, int elitism, int eligible, float mutation, int stop, int restarts, int restart_threshold)
   {
-    for(int i=0; i<N; i++)
-      for(int j=0; j<N; j++)
+      N=inputSize;
+      generation=-1;
+      Matrix mat(N, vector<int>(N, 0));
+      Matrix fixed_val(N, vector<int>(N, 0));
+      for (int i = 0; i < N; i++)
       {
-        if(mat[i][j]!=-1)
-          this->fixed_val[i][j] = 1;
-
-        this->mat[i][j] = mat[i][j];
+        for (int j = 0; j < N; j++)
+        {
+          if (board[i][j] != -1)
+          {
+            fixed_val[i][j] = 1;
+          }
+          mat[i][j]=board[i][j];
+        }
       }
+      int result = compute(mat, fixed_val, population_size, elitism, eligible, mutation, stop, restarts, restart_threshold);
+      if(result!=0){
+        return false;
+      }
+      return true;
   }
-
-  void compute(int population_size, int elitism, int eligible, float mutation, int stop, int restarts, int restart_threshold)
+  int compute(Matrix& mat, Matrix& fixed_val, int population_size, int elitism, int eligible, float mutation, int stop, int restarts, int restart_threshold)
   {
         srand((unsigned)(time(0)));
+        int SRN = (int)sqrt(N);
         //Fill in obvious values
         //init crossoff array
         bool crossoff[N][N][N];
@@ -350,12 +384,12 @@ public:
        //Phase2: GA
        bool found = false, restart = false;
        vector<Individual> persistent_population;
-       int restart_count=0, total_generation=0;
+       int restart_count=0, total_generation=0, ret;
        while((!found) && restart_count<restarts)
        {
            restart = false;
            // current generation
-           int generation = 0;
+           int gen = 0;
            int f=0;
            int *GENES= new int[N];
            for(int i = 0; i < N; i++)
@@ -373,8 +407,8 @@ public:
              for(int i = 0;i<population_size;i++)
              {
                  //std::cout<<"Creating initial population:"<<i<<"\n";
-                 int **gnome = create_gnome(mat, GENES);
-                 population.push_back(Individual(gnome));
+                 int **gnome = create_gnome(mat, GENES, N, SRN);
+                 population.push_back(Individual(N, gnome));
 
         	       for(int j=0; j<N; j++)
         	       {
@@ -418,12 +452,12 @@ public:
                //new_generation[0].printSudoku();
                if(new_generation[0].fitness!=f){
                    f=new_generation[0].fitness;
-                   cout<< "Generation: " << generation << "\t\t";
+                   cout<< "Generation: " << gen << "\t\t";
                    cout<< "Fitness: "<< new_generation[0].fitness << "\n";
                }
-               if(generation != 0 && generation%restart_threshold == 0){
+               if(gen != 0 && gen%restart_threshold == 0){
                    //f=new_generation[0].fitness;
-                   cout<< "Generation: " << generation << "\t\t";
+                   cout<< "Generation: " << gen << "\t\t";
                    cout<< "Fitness: "<< new_generation[0].fitness << "\n";
                    restart=true;
                    restart_count++;
@@ -449,8 +483,8 @@ public:
                    while(s == r) s = random_num(0, eligible*population_size/100);
                    //cout<< "parent "<< s<<"\n";
                    Individual parent2 = population[s];
-    	             int **mate = parent1.mate(parent2, fixed_val, mutation, GENES);
-                   Individual offspring = Individual(mate);
+    	             int **mate = parent1.mate(parent2, fixed_val, N, SRN, mutation, GENES);
+                   Individual offspring = Individual(N, mate);
 
       		         for(int j = 0; j < N; j++) {
           	          delete[] mate[j];
@@ -487,22 +521,24 @@ public:
                // cout<< "Fitness: "<< population[8].fitness << "\n";
                // cout<< "Fitness: "<< population[9].fitness << "\n";
 
-               generation++;
+               gen++;
                total_generation++;
                if(stop != 0)
-                if(generation > stop)
+                if(gen > stop)
                   break;
           }
-          cout<< "Generation: " << generation-1 << "\t";
+          cout<< "Generation: " << gen-1 << "\t";
           //cout<< "String: "<< population[0].chromosome <<"\t";
-          population[0].printSudoku();
+          population[0].printSudoku(N);
           cout<< "Fitness: "<< population[0].fitness << "\n";
-
+          ret=population[0].fitness;
          for(int i = 0;i<population_size;i++)
          {
   	        population.pop_back();
   	     }
       }
-      cout<< "Total Generations: " << total_generation-1 << "\t";
-}
+      cout<< "Total Generations: " << total_generation-1 << "\t\n";
+      generation=total_generation-1;
+      return ret;
+    }
 };

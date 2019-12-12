@@ -6,7 +6,8 @@ class Sudoku
 public:
     int mat[N][N];
     int fix[N][N];
-
+    int** board;
+    int size;
     Sudoku(int a[N][N])
     {
         for(int i=0;i<N;i++) {
@@ -18,6 +19,19 @@ public:
                     fix[i][j] = 1;
             }
         }
+    }
+    Sudoku(int input_size, std::vector<std::vector<int> > input_board)
+    {
+      size = input_size;
+      board = new int*[size];
+      for(int i = 0; i < size; i++)
+      {
+        board[i] = new int[size];
+        for(int j = 0; j < size; j++)
+        {
+          board[i][j] = input_board[i][j] % input_size;
+        }
+      }
     }
     // check in the box for existence
     bool unUsedInBox(int rowStart, int colStart, int num)

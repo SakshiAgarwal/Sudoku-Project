@@ -33,30 +33,30 @@ int main()
 //  {-1, -1, -1, -1,  12, 10, -1,  2,  -1, -1, -1, -1,  -1,  9, 11,  0}
 // };
 
-    // int mat[9][9] =
-    //         {
-    //             {0, -1, -1, -1, -1, -1, -1, -1, 1},
-    //             {-1, -1, 7, -1, -1, 8, -1, -1, 6},
-    //             {-1, -1, -1, 4, 2, -1, -1, 7, -1},
-    //             {-1, 7, -1, -1, -1, 2, -1, 4, -1},
-    //             {-1, -1, 5, 3, -1, 1, 6, -1, -1},
-    //             {8, 6, -1, 7, 4, -1, -1, 0, -1},
-    //             {-1, 0, -1, -1, 7, 6, -1, -1, 8},
-    //             {2, 3, -1, -1, -1, -1, 7, -1, -1},
-    //             {7, -1, -1, -1, -1, -1, -1, -1, 0}
-    //         };
-            int mat[9][9] =
-                    {
-                        {0, -1, -1, -1, -1, -1, -1, -1, -1},
-                        {-1, -1, -1, -1, -1, 8, -1, -1, 6},
-                        {-1, -1, -1, -1, 2, -1, -1, 7, -1},
-                        {-1, 7, -1, -1, -1, -1, -1, 4, -1},
-                        {-1, -1, -1, 3, -1, 1, -1, -1, -1},
-                        {8, 6, -1, -1, 4, -1, -1, 0, -1},
-                        {-1, 0, -1, -1, 7, -1, -1, -1, 8},
-                        {-1, 3, -1, -1, -1, -1, 7, -1, -1},
-                        {7, -1, -1, -1, -1, -1, -1, -1, 0}
-                    };
+    int mat[9][9] =
+            {
+                {0, -1, -1, -1, -1, -1, -1, -1, 1},
+                {-1, -1, 7, -1, -1, 8, -1, -1, 6},
+                {-1, -1, -1, 4, 2, -1, -1, 7, -1},
+                {-1, 7, -1, -1, -1, 2, -1, 4, -1},
+                {-1, -1, 5, 3, -1, 1, 6, -1, -1},
+                {8, 6, -1, 7, 4, -1, -1, 0, -1},
+                {-1, 0, -1, -1, 7, 6, -1, -1, 8},
+                {2, 3, -1, -1, -1, -1, 7, -1, -1},
+                {7, -1, -1, -1, -1, -1, -1, -1, 0}
+            };
+            // int mat[9][9] =
+            //         {
+            //             {0, -1, -1, -1, -1, -1, -1, -1, -1},
+            //             {-1, -1, -1, -1, -1, 8, -1, -1, 6},
+            //             {-1, -1, -1, -1, 2, -1, -1, 7, -1},
+            //             {-1, 7, -1, -1, -1, -1, -1, 4, -1},
+            //             {-1, -1, -1, 3, -1, 1, -1, -1, -1},
+            //             {8, 6, -1, -1, 4, -1, -1, 0, -1},
+            //             {-1, 0, -1, -1, 7, -1, -1, -1, 8},
+            //             {-1, 3, -1, -1, -1, -1, 7, -1, -1},
+            //             {7, -1, -1, -1, -1, -1, -1, -1, 0}
+            //         };
     // int mat[9][9] =
     //         {
     //             {0, 2, 7, 8, 2, 6, 5, 4, 1},
@@ -71,7 +71,15 @@ int main()
     //         };
 
 /**Create the sudoku board with matrix **/
-    GeneticAlgorithm Board(mat);
+    std::vector<std::vector<int> > M(9, vector<int>(9,0));
+    //M=new int*[9]
+    for(int i=0; i<9; i++){
+      //M[i]=new int[9];
+      for(int j=0; j<9; j++)
+        M[i][j] = mat[i][j];
+    }
+    Sudoku a(9, M);
+    GeneticAlgorithm Board;
 
 /**    Parameters for Genetic algorithm **/
     int population_size=1000; //size of Gene pool
@@ -82,8 +90,8 @@ int main()
     float mutation=0.1; //chance of random gene for offspring instead of parents'; mutation=0.1 -> 10% chance
     int restarts=100; //max number of restarts
     int restart_threshold=1000; //generation at which restart occurs
-    Board.compute(population_size, elitism, eligible, mutation, stop, restarts, restart_threshold);
-
+    bool result = Board.run(a.size, a.board, population_size, elitism, eligible, mutation, stop, restarts, restart_threshold);
+    std::cout<<0<<" : "<<result<<" , "<<Board.generation<<endl;
 
    return 0;
 }
